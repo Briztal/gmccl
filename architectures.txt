@@ -1,0 +1,10 @@
+teensy35,k64fx512;
+
+k64fx512,kinetis_k,cortex_m4f;
+
+kinetis_k;
+
+cortex_m4f,armv7m;
+
+armv7m;
+
