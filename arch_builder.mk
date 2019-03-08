@@ -17,73 +17,32 @@
 #------------------------------------------------------------- directories names
 
 #Determine the arch builder project root directory;
-__AB_DIR__ := $(dir $(lastword $(MAKEFILE_LIST)))
+__AB_DIR__ := $(dir $(lastword $(MAKEFILE_LIST))).
 
 
-#--------------------------------------------------------------------- arch call
+#----------------------------------------------------------------------- scripts
 
+#If required, scripts are executed; This leads to the definition of several
+# Makefile variables; See each script for detailed info;
+# Scripts are :
+#  - toolchain : selects the toolchain, compilation flags and memory map
+#    directory for each supported architecture;
+#  - external : external script, whose path is provided in the flag variable;
 
-#TODO SEPARATE SCRIPTS BELOW
-
-#TODO SCRIPTS FLAGS
-
-#TODO CALL SCRIPTS;
-
-
-#--------------------------------------------------------- arch variables check
-
-#Arch makefiles must mandatorily have defined :
-# - __TC_TYPE__ : the toolchain type variable;
-# - LD_MMAP_DIR : the directory where the target chip's memory map linker
-#   script "memory_map.ld" resides;
-
-ifndef __TC_TYPE__
-$(error Arch make units did not define the toolchain type)
+ifdef TOOLCHAIN_SCRIPT
+include scripts/toolchain.mk
 endif
 
-ifndef LD_MMAP_DIR
-$(error Arch make units did not define the directort of the memory map file)
+ifdef EXTERNAL_SCRIPT
+include $(EXTERNAL_SCRIPT)
 endif
 
 
-#--------------------------------------------------------- toolchain definition
+#----------------------------------------------------------------------- cleanup
 
-#include the toolchain file, that will define all toolchain related variables;
-include $(__AB_IDIR__)/toolchains.mk
-
-
-#------------------------------------------------------------- toolchain checks
-
-#arch makefiles must define the toolchain, namely : 
-# - CC : the C compiler;
-# - LD : the elf linker;
-# - AR : the elf archiver;
-# - OC : (objcopy) the elf copier;
-# - OD : (objdump) the elf dumper;
-# - RD : (readelf) the elf reader;
-
-ifndef CC
-$(error arch make units did not define CC (compiler))
-endif
-
-ifndef LD
-$(error arch make units did not define LD (linker))
-endif
-
-ifndef AR
-$(error arch make units did not define AR (archiver))
-endif
-
-ifndef OC
-$(error arch make units did not define OC (objcopy))
-endif
-
-ifndef OD
-$(error arch make units did not define OD (objdump))
-endif
-
-ifndef RD
-$(error arch make units did not define RD (readelf))
-endif
-
+#All used variables are undefined;
+undefine __AB_DIR__
+undefine TOOLCHAIN_SCRIPT
+undefine PROCINFO_SCRIPT
+undefine EXTERNAL_SCRIPT
 

@@ -2,10 +2,10 @@
 
 #External makefile inclusion;
 ifdef __CED__
--include $(__EDIR__)/teensy35.mk
+-include $(__EDIR__)/teensy_35.mk
 endif
 ifdef __CESD__
--include $(__EDIR__)/teensy35/teensy35.mk
+-include $(__EDIR__)/teensy_35/teensy_35.mk
 endif
 
 #Dependencies makefiles inclusion;

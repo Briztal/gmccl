@@ -9,5 +9,5 @@ ifdef __CESD__
 endif
 
 #Dependencies makefiles inclusion;
-include $(__IDIR__)/armv7m.mk
+include $(__IDIR__)/arm_v7m.mk
 
