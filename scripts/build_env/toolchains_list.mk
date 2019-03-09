@@ -1,6 +1,6 @@
 
 
-#If the arm_none_eabi toolchain must be used :
+#If the arm_none_eabi build_env must be used :
 ifeq ($(__TC_TYPE__),ARM_NONE_EABI)
 
 # names for the compiler programs

@@ -1,5 +1,5 @@
 
-#The arm-none-eabi toolchain will be used;
+#The arm-none-eabi build_env will be used;
 __TC_TYPE__ := ARM_NONE_EABI
 
 PROC_ENDIANNESS = LITTLE

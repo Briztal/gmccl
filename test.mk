@@ -1,6 +1,6 @@
 TARGET_ARCH := teensy_35
 
-TOOLCHAIN_SCRIPT := 1
+BUILD_ENV_SCRIPT := 1
 
 include arch_builder.mk
 

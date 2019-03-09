@@ -25,12 +25,12 @@ __AB_DIR__ := $(dir $(lastword $(MAKEFILE_LIST))).
 #If required, scripts are executed; This leads to the definition of several
 # Makefile variables; See each script for detailed info;
 # Scripts are :
-#  - toolchain : selects the toolchain, compilation flags and memory map
+#  - build_env : selects the build_env, compilation flags and memory map
 #    directory for each supported architecture;
 #  - external : external script, whose path is provided in the flag variable;
 
-ifdef TOOLCHAIN_SCRIPT
-include scripts/toolchain.mk
+ifdef BUILD_ENV_SCRIPT
+include scripts/build_env.mk
 endif
 
 ifdef EXTERNAL_SCRIPT
