@@ -23,10 +23,6 @@ PROC_ENDIANNESS :=
 
 #------------------------------------------------------------- arch_builder call
 
-#The build_env script only uses directrory inclusion;
-__CED__ := 1
-__CESD__ :=
-
 #Provide the external directory;
 __EDIR__ := $(__AB_DIR__)/scripts/build_env
 

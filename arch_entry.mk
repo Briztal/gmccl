@@ -1,4 +1,4 @@
-#---------------------------------------------------------- prerequisites check
+#----------------------------------------------------------- prerequisites check
 
 #If the target architecture is not provided, fail;
 ifndef TARGET_ARCH
@@ -15,13 +15,13 @@ ifndef __EDIR__
 $(error The path of the external directory has not been provided)
 endif
 
-#---------------------------------------------------------- Internal directory
+#------------------------------------------------------------ internal directory
 
 #Define the arch internal directory;
 __IDIR__ := $(__AB_DIR__)/arch
 
 
-#-------------------------------------------------------------- target makefile
+#--------------------------------------------------------------- target makefile
 
 #Include the target arch makefile, that will include all internal and external
 # dependencies;
@@ -29,9 +29,7 @@ __IDIR__ := $(__AB_DIR__)/arch
 include $(__IDIR__)/$(TARGET_ARCH).mk
 
 
-#-------------------------------------------------------------- cleanup
+#----------------------------------------------------------------------- cleanup
 
-#__EDIR__, __CED__ and __CESD__ are undefined after each arch inclusion;
+# TARGET_ARCH and __EDIR__ are undefined after each arch inclusion;
 undefine __EDIR__
-undefine __CED__
-undefine __CESD__
