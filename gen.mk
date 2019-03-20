@@ -8,6 +8,6 @@ gen:
 	-rm -rf arch
 
 #Generate the arch makefile system in arch/ from arch.txt;
-	$(ZBAFF_PATH) arch.txt __IDIR__ __EDIR__ arch
+	$(ZBAFF_PATH) arch.txt __AB_IDIR__ __AB_EDIR__ arch
 
 

@@ -24,15 +24,15 @@ PROC_ENDIANNESS :=
 #------------------------------------------------------------- arch_builder call
 
 #Provide the external directory;
-__EDIR__ := $(__AB_DIR__)/scripts/build_env
+__AB_EDIR__ := $(__AB_RDIR__)/scripts/build_env
 
 #Include arch_entry to initialise variables;
-include $(__AB_DIR__)/arch_entry.mk
+include $(__AB_RDIR__)/arch_entry.mk
 
 
 #---------------------------------------------------------- arch variables check
 
-#Arch makefiles must mandatorily have defined the build_env type;
+#Arch makefiles must mandatorily have defined the toolchain type;
 ifndef __TC_TYPE__
 $(error makefiles did not define the toolchain type)
 endif
@@ -75,16 +75,17 @@ $(error makefiles did not define the processor endianness)
 endif
 
 
-#---------------------------------------------------------- build_env definition
-
-#include the build_env file, that will define all build_env related variables;
-include $(__AB_DIR__)/scripts/build_env/toolchains_list.mk
+#---------------------------------------------------------- toolchain definition
 
 
-#-------------------------------------------------------------- build_env checks
+#include the toolchain file, that will define all toolchain related variables;
+include $(__AB_RDIR__)/scripts/build_env/toolchains_list.mk
 
 
-#arch makefiles must define the build_env, namely :
+#-------------------------------------------------------------- toolchain checks
+
+
+#arch makefiles must define the toolchain, namely :
 # - TC_CC : the C compiler;
 # - TC_LD : the elf linker;
 # - TC_AR : the elf archiver;
