@@ -1,8 +1,7 @@
 #This is an automatically generated makefile, please do not modify it;
 
 #External makefile inclusion;
--include $(__AB_EDIR__)/teensy_35.mk
+-include $(CM__EXT_DIR)/arm_v7m.mk
 
 #Dependencies makefiles inclusion;
-include $(__AB_IDIR__)/k64fx512.mk
 

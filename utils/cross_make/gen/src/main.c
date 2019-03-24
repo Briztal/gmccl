@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 
-#include "env_gen.h"
+#include "generator.h"
 
 
 #define hd_error(msg) {printf(#msg);exit(1);}
@@ -54,8 +54,13 @@ int main(int argc, char *argv[])
 	input_file = argv[1];
 	output_dir = argv[4];
 	
-	/*POSIX : Create the output directory;*/
-	if (mkdir(output_dir, 0600) == -1) hd_error(mkdir)
+	f = fopen(output_dir,"r");
+	
+	if (!f) {
+		hd_error(no dir);
+	}
+	
+	fclose(f);
 	
 	/*Determine the length of the dir;*/
 	dir_len = strlen(output_dir);

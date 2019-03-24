@@ -1,4 +1,4 @@
-#include "env_gen.h"
+#include "generator.h"
 
 #include <string.h>
 
@@ -207,7 +207,7 @@ bool zbaff_parse(struct zbaff_env *ev, char c)
 	/*If the end of the file is reached :*/
 	if (c == EOF) {
 		
-		/*Save the current word in the descriptors;*/
+		/*Save the current word in the desc;*/
 		save_word(p);
 		
 		/*Generate the parsed environment if required;*/

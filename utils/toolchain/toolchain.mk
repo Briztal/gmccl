@@ -4,14 +4,13 @@
 #TODO VARIABLES CHECKUP, CONTENT, SPACES, WORDS
 
 #If the target was not provided, fail;
-$(eval $(call REQ_DEF_VAR,BB_TARGET,build_base))
-
+$(eval $(call REQ_DEF_VAR,TC__TARGET,toolchain))
 
 
 #---------------------------------------------------------------- variables init
 
 #All variables updated by the script are reset;
-BB_TC_TYPE :=
+TC__TYPE :=
 export CC :=
 export LD :=
 export AR :=
@@ -24,19 +23,19 @@ export LDFLAGS :=
 #--------------------------------------------------------------- local variables
 
 #Our curent directory;
-BB_CDIR := $(dir $(lastword $(MAKEFILE_LIST)))
+TC__CDIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
 
 #--------------------------------------------------------------- cross make call
 
 #Cross make is used, with the arch environment;
-$(eval $(call UTIL_DEF_VAR,cross_make,CM_ENV,arch))
+$(eval $(call UTIL_DEF_VAR,cross_make,CM__ENV,arch))
 
 #Provide the external directory;
-$(eval $(call UTIL_DEF_VAR,cross_make,CM_EXT_DIR,$(BB_CDIR).))
+$(eval $(call UTIL_DEF_VAR,cross_make,CM__EXT_DIR,$(TC__CDIR).))
 
 #Transfer the target;
-$(eval $(call UTIL_DEF_VAR,cross_make,CM_TARGET,$(BB_TARGET)))
+$(eval $(call UTIL_DEF_VAR,cross_make,CM__TARGET,$(TC__TARGET)))
 
 #Call cross make;
 $(eval $(call UTIL_CALL,cross_make))
@@ -45,7 +44,7 @@ $(eval $(call UTIL_CALL,cross_make))
 #---------------------------------------------------------- arch variables check
 
 #Arch makefiles must mandatorily have defined the toolchain type;
-ifndef BB_TC_TYPE
+ifndef TC__TYPE
 $(error makefiles did not define the toolchain type)
 endif
 
@@ -54,7 +53,7 @@ endif
 #---------------------------------------------------------- toolchain definition
 
 #include the toolchain file, that will define all toolchain related variables;
-include $(BB_CDIR)toolchains_list.mk
+include $(TC__CDIR)toolchains_list.mk
 
 
 #-------------------------------------------------------------- toolchain checks
@@ -95,5 +94,5 @@ endif
 
 #----------------------------------------------------------------------- cleanup
 
-undefine BB_CDIR
-undefine BB_TC_TYPE
+undefine TC__CDIR
+undefine TC__TYPE

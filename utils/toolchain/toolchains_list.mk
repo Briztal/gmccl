@@ -1,6 +1,6 @@
 
 #If the arm_none_eabi toolchain must be used :
-ifeq ($(BB_TC_TYPE),ARM_NONE_EABI)
+ifeq ($(TC__TYPE),ARM_NONE_EABI)
 
 CC := /usr/bin/arm-none-eabi-gcc
 LD := /usr/bin/arm-none-eabi-ld
