@@ -12,4 +12,19 @@ $(eval $(call UTIL_CALL,arch_info))
 
 
 all:
-	@echo $(CC) $(MEM_FLASH_ORIGIN)
+
+	@echo $(CC)
+	@echo $(LD)
+	@echo $(AR)
+	@echo $(OC)
+	@echo $(OD)
+	@echo $(RD)
+	@echo $(CFLAGS)
+	@echo $(LDFLAGS)
+	@echo $(MEM_FLASH_ORIGIN)
+	@echo $(MEM_FLASH_SIZE)
+	@echo $(MEM_RAM_ORIGIN)
+	@echo $(MEM_RAM_SIZE)
+	@echo $(PROC_ENDIANNESS)
+	@echo $(PROC_IBUS_SIZE)
+	@echo $(PROC_DBUS_SIZE)
