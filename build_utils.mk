@@ -1,4 +1,6 @@
 
-$(eval $(call UTIL_REGISTER,env__builder,$(__MFTK_RDIR__)/utils/env_builder/env_builder.mk))
+$(eval $(call UTIL_REGISTER,cross_make,$(__MFTK_RDIR__)/utils/cross_make/cross_make.mk))
 
-$(eval $(call UTIL_REGISTER,buil_dbase,$(__MFTK_RDIR__)/utils/env_builder/env_builder.mk))
+$(eval $(call UTIL_REGISTER,arch_info,$(__MFTK_RDIR__)/utils/arch_info/arch_info.mk))
+
+$(eval $(call UTIL_REGISTER,build_base,$(__MFTK_RDIR__)/utils/build_base/build_base.mk))
