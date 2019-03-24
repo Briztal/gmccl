@@ -1,4 +1,6 @@
 
+TODO REVIEW .gitignore to exclude build dirs and environment dirs;
+
 
 BUILD SCRIPT
 
