@@ -1,5 +1,8 @@
 #------------------------------------------------------------------- directories
 
+#Mark MFTK present;
+__MFTK__ := 1
+
 #Define the mftk root directory;
 __MFTK_RDIR__ := $(dir $(lastword $(MAKEFILE_LIST))).
 
@@ -92,8 +95,28 @@ __UTIL_$(1)_NAMES__ :=
 endef
 
 
+# Fails if a makefile utility is not registered;
+#
+# parameters :
+#  1 : the name of the utility;
+#
+# used vars :
+#  __UTIL_$1_PATH__
+
+define UTIL_REQUIRE
+
+#Check that the utility name is a valid word;
+$$(eval $$(call WORD_CHECK,$1,UTIL_REQUIRE,utility name))
+
+#If the utility path is not defined, fail;
+$$(eval $$(call REQ_DEF_VAR,__UTIL_$1_PATH__,in UTIL_REQUIRE : module $1 not registered;)
+
+endef
+
+
+
 #Include the build nodes registration file;
-include $(__MFTK_RDIR__)/build_utils.mk
+include $(__MFTK_RDIR__)/_utils.mk
 
 #Registration macro is not to be used anymore;
 undefine UTIL_REGISTER
@@ -211,7 +234,7 @@ endef
 
 
 #Include the build utilities registration file;
-include $(__MFTK_RDIR__)/build_nodes.mk
+include $(__MFTK_RDIR__)/_nodes.mk
 
 #Registration macros are useless now, they are undefined;
 undefine NODE_REGISTER

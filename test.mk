@@ -18,7 +18,7 @@ all:
 	@echo $(AR)
 	@echo $(OC)
 	@echo $(OD)
-	@echo $(RD)
+	@echo $(RE)
 	@echo $(CFLAGS)
 	@echo $(LDFLAGS)
 	@echo $(MEM_FLASH_ORIGIN)

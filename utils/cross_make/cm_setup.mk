@@ -8,10 +8,6 @@ CC := gcc $(CFLAGS) -Isrc/
 .PHONY: clean
 clean:
 	rm -rf env
-
-
-.PHONY: clean_all
-clean_all: clean
 	rm -rf gen/build
 
 
@@ -38,6 +34,6 @@ env/% : desc/%
 envs : $(ENVS)
 
 
-.PHONY: all
-all: clean_all generator envs
+.PHONY: setup
+setup: clean generator envs
 
