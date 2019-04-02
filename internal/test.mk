@@ -1,5 +1,5 @@
 
-include mftk.mk
+include ../mftk.mk
 
 $(eval $(call UTIL_DEF_VAR,toolchain,TC__TARGET,teensy_35))
 

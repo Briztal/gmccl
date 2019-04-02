@@ -1,10 +1,10 @@
 #------------------------------------------------------------------- directories
 
 #Mark MFTK present;
-__MFTK__ := 1
+export __MFTK__ := 1
 
 #Define the mftk root directory;
-__MFTK_RDIR__ := $(dir $(lastword $(MAKEFILE_LIST))).
+export __MFTK_RDIR__ := $(dir $(lastword $(MAKEFILE_LIST))).
 
 
 #------------------------------------------------------------------ error report
@@ -38,7 +38,7 @@ endif
 ifneq ($(words $1),1)
 $$(error in $2 : multi word $3)
 endif
-ifneq ($1,$(strip $(1)))
+ifneq ($1,$(strip $1))
 $$(error in $2 : whitespace around $3)
 endif
 endef
@@ -89,8 +89,8 @@ $$(eval $$(call REQ_NDEF_VAR,__UTIL_$1_PATH__,UTIL_REGISTER))
 $$(eval $$(call REQ_NDEF_VAR,__UTIL_$1_NAMES__,UTIL_REGISTER))
 
 #Initialize the couple of variables;
-__UTIL_$(1)_PATH__ := $(2)
-__UTIL_$(1)_NAMES__ :=
+__UTIL_$1_PATH__ := $2
+__UTIL_$1_NAMES__ :=
 
 endef
 
@@ -115,8 +115,9 @@ endef
 
 
 
-#Include the build nodes registration file;
-include $(__MFTK_RDIR__)/_utils.mk
+#Register build utilities;
+include $(__MFTK_RDIR__)/internal/auto_utils.mk
+include $(__MFTK_RDIR__)/utils.mk
 
 #Registration macro is not to be used anymore;
 undefine UTIL_REGISTER
@@ -203,7 +204,7 @@ endif
 endef
 
 
-#------------------------------------------------------------------- build nodes
+#------------------------------------------------------------------- build nodes.mk
 
 
 # Registers a build node
@@ -233,8 +234,9 @@ __NODE_$1_PATH__ := $2
 endef
 
 
-#Include the build utilities registration file;
-include $(__MFTK_RDIR__)/_nodes.mk
+#Register build nodes;
+include $(__MFTK_RDIR__)/internal/auto_nodes.mk
+include $(__MFTK_RDIR__)/nodes.mk
 
 #Registration macros are useless now, they are undefined;
 undefine NODE_REGISTER
@@ -254,6 +256,7 @@ undefine NODE_REGISTER
 #  4 : the value of the variable to define;
 #
 # used variables :
+#  __NODE_$1_PATH__ : the node's entry makefile path;
 #  __NODE_$1_$2_NAMES__ : the list of variables names;
 #  __NODE_$1_$2_DEFS__ : the list of variables definitions;
 #
@@ -265,14 +268,16 @@ $$(eval $$(call WORD_CHECK,$1,NODE_ADD_DEF,node name))
 #Check that the variable set name is a valid word;
 $$(eval $$(call WORD_CHECK,$2,NODE_ADD_DEF,variabel set name))
 
-#Check that the variable set name is a valid word;
+#Check that the variable name is a valid word;
 $$(eval $$(call WORD_CHECK,$3,NODE_ADD_DEF,variable name))
 
 #Check that the node is registered;
-$$(eval $$(call REQ_DEF_VAR,$3,NODE_ADD_DEF))
+$$(eval $$(call REQ_DEF_VAR,__NODE_$1_PATH__,NODE_ADD_DEF))
 
 #Check that the variable does not exist;
-$$(eval $$(call REQ_NDEF_VAR,__NODE_$1_PATH__,NODE_ADD_DEF))
+ifneq ($(findstring $3,__NODE_$1_$2_NAMES__),)
+$$(error in NODE_ADD_DEF : variable $3 already defined))
+endif
 
 #Check that the variable value is not empty;
 $$(eval $$(call EMPTY_ERROR,$4,NODE_ADD_DEF,variable value))
@@ -289,10 +294,10 @@ __NODE_$1_$2_DEFS__ :=
 endif
 
 #Add the variable name to the names list;
-__NODE_$1__$2_NAMES__ += $3
+__NODE_$1_$2_NAMES__ += $3
 
 #Add the variable definition to the def list;
-__NODE_$1_$2_DEFS__ += $3=$(4)
+__NODE_$1_$2_DEFS__ += $3=$4
 
 endef
 
@@ -343,6 +348,6 @@ endef
 #  __NODE_$1__$3_DEFS__ : the list of variables definitions;
 #
 define NODE_CALL
-@$$(eval $$(call NODE_CALL_CHECK,$1,$2,$3))
-$(MAKE) -f $(__NODE_$1_PATH__) $2 $(__NODE_$1_$3_DEFS__) $(4)
+@$(eval $(call NODE_CALL_CHECK,$1,$2,$3))
+$(MAKE) -f $(__NODE_$1_PATH__) $2 $(__NODE_$1_$3_DEFS__) $4
 endef

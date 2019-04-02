@@ -11,14 +11,14 @@ $(eval $(call REQ_DEF_VAR,TC__TARGET,toolchain))
 
 #All variables updated by the script are reset;
 TC__TYPE :=
-export CC :=
-export LD :=
-export AR :=
-export OC :=
-export OD :=
-export RE :=
-export CFLAGS :=
-export LDFLAGS :=
+export $(TC__PREFIX)CC :=
+export $(TC__PREFIX)LD :=
+export $(TC__PREFIX)AR :=
+export $(TC__PREFIX)OC :=
+export $(TC__PREFIX)OD :=
+export $(TC__PREFIX)RE :=
+export $(TC__PREFIX)CFLAGS :=
+export $(TC__PREFIX)LDFLAGS :=
 
 #--------------------------------------------------------------- local variables
 
@@ -65,30 +65,31 @@ include $(TC__CDIR)toolchains_list.mk
 # - OC : (objcopy) the elf copier;
 # - OD : (objdump) the elf dumper;
 # - RD : (readelf) the elf reader;
+#All names can be prefixed, by defining TC__PREFIX
 
 
-ifndef CC
-$(error the toolchain makefile did not define CC (C compiler))
+ifndef $(TC__PREFIX)CC
+$(error the toolchain makefile did not define $(TC__PREFIX)CC (C compiler))
 endif
 
-ifndef LD
-$(error the toolchain makefile did not define LD (elf linker))
+ifndef $(TC__PREFIX)LD
+$(error the toolchain makefile did not define $(TC__PREFIX)LD (elf linker))
 endif
 
-ifndef AR
-$(error the toolchain makefile did not define AR (archiver))
+ifndef $(TC__PREFIX)AR
+$(error the toolchain makefile did not define $(TC__PREFIX)AR (archiver))
 endif
 
-ifndef OC
-$(error the toolchain makefile did not define OC (objcopy))
+ifndef $(TC__PREFIX)OC
+$(error the toolchain makefile did not define $(TC__PREFIX)OC (objcopy))
 endif
 
-ifndef OD
-$(error the toolchain makefile did not define OD (objdump))
+ifndef $(TC__PREFIX)OD
+$(error the toolchain makefile did not define $(TC__PREFIX)OD (objdump))
 endif
 
-ifndef RE
-$(error the toolchain makefile did not define RE (readelf))
+ifndef $(TC__PREFIX)RE
+$(error the toolchain makefile did not define $(TC__PREFIX)RE (readelf))
 endif
 
 
