@@ -117,7 +117,6 @@ endef
 
 #Register build utilities;
 include $(__MFTK_RDIR__)/internal/auto_utils.mk
-include $(__MFTK_RDIR__)/utils.mk
 
 #Registration macro is not to be used anymore;
 undefine UTIL_REGISTER
@@ -236,7 +235,6 @@ endef
 
 #Register build nodes;
 include $(__MFTK_RDIR__)/internal/auto_nodes.mk
-include $(__MFTK_RDIR__)/nodes.mk
 
 #Registration macros are useless now, they are undefined;
 undefine NODE_REGISTER
