@@ -1,41 +1,40 @@
 
 
 #----------------------------------------------------------- prerequisites check
-#TODO VARIABLES CHECKUP, CONTENT, SPACES, WORDS
 
 #If the target was not provided, fail;
-$(eval $(call REQ_DEF_VAR,TC__TARGET,toolchain))
+$(eval $(call REQ_DEF_VAR,tc__target,toolchain))
 
 
 #---------------------------------------------------------------- variables init
 
 #All variables updated by the script are reset;
-TC__TYPE :=
-export $(TC__PREFIX)CC :=
-export $(TC__PREFIX)LD :=
-export $(TC__PREFIX)AR :=
-export $(TC__PREFIX)OC :=
-export $(TC__PREFIX)OD :=
-export $(TC__PREFIX)RE :=
-export $(TC__PREFIX)CFLAGS :=
-export $(TC__PREFIX)LDFLAGS :=
+tc__type :=
+export $(tc__prefix)CC :=
+export $(tc__prefix)LD :=
+export $(tc__prefix)AR :=
+export $(tc__prefix)OC :=
+export $(tc__prefix)OD :=
+export $(tc__prefix)RE :=
+export $(tc__prefix)CFLAGS :=
+export $(tc__prefix)LDFLAGS :=
 
 #--------------------------------------------------------------- local variables
 
 #Our curent directory;
-TC__CDIR := $(dir $(lastword $(MAKEFILE_LIST)))
+tc__cdir := $(dir $(lastword $(MAKEFILE_LIST)))
 
 
 #--------------------------------------------------------------- cross make call
 
 #Cross make is used, with the arch environment;
-$(eval $(call UTIL_DEF_VAR,cross_make,CM__ENV,arch))
+$(eval $(call UTIL_DEF_VAR,cross_make,cm__env,arch))
 
 #Provide the external directory;
-$(eval $(call UTIL_DEF_VAR,cross_make,CM__EXT_DIR,$(TC__CDIR).))
+$(eval $(call UTIL_DEF_VAR,cross_make,cm__ext_dir,$(tc__cdir).))
 
 #Transfer the target;
-$(eval $(call UTIL_DEF_VAR,cross_make,CM__TARGET,$(TC__TARGET)))
+$(eval $(call UTIL_DEF_VAR,cross_make,cm__target,$(tc__target)))
 
 #Call cross make;
 $(eval $(call UTIL_CALL,cross_make))
@@ -44,7 +43,7 @@ $(eval $(call UTIL_CALL,cross_make))
 #---------------------------------------------------------- arch variables check
 
 #Arch makefiles must mandatorily have defined the toolchain type;
-ifndef TC__TYPE
+ifndef tc__type
 $(error makefiles did not define the toolchain type)
 endif
 
@@ -53,7 +52,7 @@ endif
 #---------------------------------------------------------- toolchain definition
 
 #include the toolchain file, that will define all toolchain related variables;
-include $(TC__CDIR)toolchains_list.mk
+include $(tc__cdir)toolchains_list.mk
 
 
 #-------------------------------------------------------------- toolchain checks
@@ -65,35 +64,35 @@ include $(TC__CDIR)toolchains_list.mk
 # - OC : (objcopy) the elf copier;
 # - OD : (objdump) the elf dumper;
 # - RD : (readelf) the elf reader;
-#All names can be prefixed, by defining TC__PREFIX
+#All names can be prefixed, by defining tc__prefix
 
 
-ifndef $(TC__PREFIX)CC
-$(error the toolchain makefile did not define $(TC__PREFIX)CC (C compiler))
+ifndef $(tc__prefix)CC
+$(error the toolchain makefile did not define $(tc__prefix)CC (C compiler))
 endif
 
-ifndef $(TC__PREFIX)LD
-$(error the toolchain makefile did not define $(TC__PREFIX)LD (elf linker))
+ifndef $(tc__prefix)LD
+$(error the toolchain makefile did not define $(tc__prefix)LD (elf linker))
 endif
 
-ifndef $(TC__PREFIX)AR
-$(error the toolchain makefile did not define $(TC__PREFIX)AR (archiver))
+ifndef $(tc__prefix)AR
+$(error the toolchain makefile did not define $(tc__prefix)AR (archiver))
 endif
 
-ifndef $(TC__PREFIX)OC
-$(error the toolchain makefile did not define $(TC__PREFIX)OC (objcopy))
+ifndef $(tc__prefix)OC
+$(error the toolchain makefile did not define $(tc__prefix)OC (objcopy))
 endif
 
-ifndef $(TC__PREFIX)OD
-$(error the toolchain makefile did not define $(TC__PREFIX)OD (objdump))
+ifndef $(tc__prefix)OD
+$(error the toolchain makefile did not define $(tc__prefix)OD (objdump))
 endif
 
-ifndef $(TC__PREFIX)RE
-$(error the toolchain makefile did not define $(TC__PREFIX)RE (readelf))
+ifndef $(tc__prefix)RE
+$(error the toolchain makefile did not define $(tc__prefix)RE (readelf))
 endif
 
 
 #----------------------------------------------------------------------- cleanup
 
-undefine TC__CDIR
-undefine TC__TYPE
+undefine tc__cdir
+undefine tc__type

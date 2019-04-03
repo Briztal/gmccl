@@ -4,7 +4,7 @@
 #TODO VARIABLES CHECKUP, CONTENT, SPACES, WORDS
 
 #If the target was not provided, fail;
-$(eval $(call REQ_DEF_VAR,AI__TARGET,build_base))
+$(eval $(call REQ_DEF_VAR,ai__target,build_base))
 
 
 #---------------------------------------------------------------- variables init
@@ -22,19 +22,19 @@ PROC_ENDIANNESS :=
 #--------------------------------------------------------------- local variables
 
 #Our curent directory;
-AI__CDIR := $(dir $(lastword $(MAKEFILE_LIST)))
+ai__cdir := $(dir $(lastword $(MAKEFILE_LIST)))
 
 
 #--------------------------------------------------------------- cross make call
 
 #Cross make is used, with the arch environment;
-$(eval $(call UTIL_DEF_VAR,cross_make,CM__ENV,arch))
+$(eval $(call UTIL_DEF_VAR,cross_make,cm__env,arch))
 
 #Provide the external directory;
-$(eval $(call UTIL_DEF_VAR,cross_make,CM__EXT_DIR,$(AI__CDIR).))
+$(eval $(call UTIL_DEF_VAR,cross_make,cm__ext_dir,$(ai__cdir).))
 
 #Transfer the target;
-$(eval $(call UTIL_DEF_VAR,cross_make,CM__TARGET,$(AI__TARGET)))
+$(eval $(call UTIL_DEF_VAR,cross_make,cm__target,$(ai__target)))
 
 #Call cross make;
 $(eval $(call UTIL_CALL,cross_make))
@@ -79,4 +79,4 @@ endif
 
 #----------------------------------------------------------------------- cleanup
 
-undefine AI__CDIR
+undefine ai__cdir

@@ -27,7 +27,7 @@ ENVS := $(DESCRIPTORS:desc/%=env/%)
 .PHONY: env/%
 env/% : desc/%
 	mkdir -p $@
-	gen/build/generator $^ CM__INT_DIR CM__EXT_DIR $@
+	gen/build/generator $^ cm__int_dir cm__ext_dir $@
 
 
 .PHONY: envs
