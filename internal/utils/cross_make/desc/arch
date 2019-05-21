@@ -1,5 +1,6 @@
+arm32;
 
-arm_v7m;
+armv7m,arm32;
 
 cortex_m4f,arm_v7m;
 

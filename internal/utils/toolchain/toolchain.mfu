@@ -5,19 +5,23 @@
 #If the target was not provided, fail;
 $(eval $(call REQ_DEF_VAR,tc__target,toolchain))
 
+#--------------------------------------------------------------------------- log
+
+#Display the name of the entry architecture;
+$(info [toolchain] entering : ($(tc__target)))
 
 #---------------------------------------------------------------- variables init
 
 #All variables updated by the script are reset;
 tc__type :=
-export $(tc__prefix)CC :=
-export $(tc__prefix)LD :=
-export $(tc__prefix)AR :=
-export $(tc__prefix)OC :=
-export $(tc__prefix)OD :=
-export $(tc__prefix)RE :=
-export $(tc__prefix)CFLAGS :=
-export $(tc__prefix)LDFLAGS :=
+$(tc__prefix)CC :=
+$(tc__prefix)LD :=
+$(tc__prefix)AR :=
+$(tc__prefix)OC :=
+$(tc__prefix)OD :=
+$(tc__prefix)RE :=
+$(tc__prefix)CFLAGS :=
+$(tc__prefix)LDFLAGS :=
 
 #--------------------------------------------------------------- local variables
 
@@ -96,3 +100,7 @@ endif
 
 undefine tc__cdir
 undefine tc__type
+
+#--------------------------------------------------------------------------- log
+$(info [toolchain] leaving)
+

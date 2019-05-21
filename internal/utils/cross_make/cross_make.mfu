@@ -7,6 +7,8 @@
 
 #TODO VARIABLES CHECKUP, CONTENT, SPACES, WORDS
 
+$(info [cross_make] entering : ($(cm__env),$(cm__ext_dir),$(cm__target)))
+
 #If the environment was not provided, fail;
 $(eval $(call REQ_DEF_VAR,cm__env,cross_make))
 
@@ -29,4 +31,7 @@ include $(cm__int_dir)/$(cm__target).mk
 
 #----------------------------------------------------------------------- cleanup
 
+#undefine locals;
 undefine cm__int_dir
+
+$(info [cross_make] leaving)

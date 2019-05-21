@@ -1,8 +1,6 @@
 
-setup :
-	make -C utils/cross_make -f cm_setup.mk setup
-
 update :
+	make -C utils/cross_make -f cm_setup.mk setup
 	./update.sh
 
 test :
