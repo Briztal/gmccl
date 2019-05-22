@@ -19,7 +19,6 @@ MFTK provides built-in utilities, namely :
 
 Both toolchain and arch_info are using cross-make;
 
-
 ## In brief
 
 ### Downloading MFTK
@@ -77,14 +76,12 @@ registrations in `internal/auto_utils.mk` and `internal/auto_nodes.mk`;
 
 When mftk has been updated, you can use it freely
 
-
 ### Including MFTK
 
 To use mftk in one of your makefiles, include the file `mftk.mk` present in 
 the project's main directory; 
 Your makefile will then have access to all MFTK's features, and will be able 
 to execute utilities and nodes;
-
 
 ## A brief reminder about makefiles;
 
@@ -108,9 +105,7 @@ Its syntax is $(eval $(variable_name)), with a special reference to the
 god-blessed $(eval $(call func_name,arg1,arg2,...)) that expands the provided 
 function and interprets the result as makefile syntax;
 
-
 ## Naming policy
-
 
 When dealing with sub-makes, by make sub-call or inclusion, using variables 
 can get messy, as variables with temporary use may have simple name (clearly, 
@@ -137,7 +132,7 @@ The following rules are applied :
 - any variable provided to or used by a node or an utility named ```A``` will 
 be in the namespace of ```A```;
 
-###Naming constraints
+### Naming constraints
 
 As a consequence to the namespace policy no utility, node or related variable 
 name should :
@@ -148,7 +143,6 @@ name should :
 All functions provided by MFTK regarding on utilities and modules, in addition 
 to their respective functions, ensure that the naming policy is respected for 
 all relevant arguments;
-
 
 ## Makefile Utility
 
@@ -185,10 +179,10 @@ undefined;
 ### Tools
 
 MFTK provides the following functions to deal with utilities :
-- ```mftk.utility.register(util_name)``` : registers an utility to mftk;
-- ```mftk.utility.require(util_name)``` : fails if an utility is not registered to 
-mftk;
-- ```mftk.utility.define(util_name,var_name,var_value)``` : defines the argument 
-variable `util_name.var_name` and sets it to var_value
-- ```mftk.utility.execute(util_name)``` : includes the utility's makefile, and 
-undefines any argument variable defined with mftk.utility.define;
+
+Function | Description
+---- | -------------
+mftk.utility.register(util_name) | registers an utility to mftk;
+mftk.utility.require(util_name) | fails if an utility is not registered to mftk;
+mftk.utility.define(util_name,var_name,var_value) | defines the argument variable util_name.var_name and sets it to var_value
+mftk.utility.execute(util_name) | includes the utility's makefile, and undefines any argument variable defined with mftk.utility.define;
