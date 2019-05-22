@@ -89,7 +89,7 @@ to execute utilities and nodes;
 ## A brief reminder about makefiles;
 
 variables : a variable is a makefile string containing any character except 
-':' '#' or '=', that refers to another string; 
+```=``` ```=``` or ```=```, that refers to another string; 
 It can be defined directly using a =-like (= ?= += ...) operator, or indirectly
 using keywords define ... endef;
 Later, it can be referred to using $([variable_name])
@@ -120,26 +120,28 @@ definition will override definitions with the same name;
 ### Namespaces
 
 As stated earlier, makefiles variables or functions names can contain any 
-character except '=' '#' or ':', and in particular, they can contain '.'.
+character except ```=``` ```#``` or ```:```, and in particular, they can 
+contain```.```
 
 To tackle the previous issue, as it defines multiple functions and internal 
 variables, mftk uses namespaces, taking advantage of the possibility to include 
-'.' in names;
+```.``` in names;
 
-A variable will be said to be in the namespace of "B" (with B containing 
-eventually one or several '.') if the variable has the prefix "B." in its name; 
+A variable will be said to be in the namespace of ```B``` (with ```B```
+containing eventually one or several ```.```) if the variable has the prefix
+```B.``` in its name; 
 
 The following rules are applied :
 - any function / internal variable related to mftk will be in the namespace of
-"mftk"
-- any variable provided to or used by a node or an utility named A will be in 
-the namespace of A;
+```mftk```
+- any variable provided to or used by a node or an utility named ```A``` will 
+be in the namespace of ```A```;
 
 ###Naming constraints
 
 As a consequence to the namespace policy no utility, node or related variable 
 name should :
-- contain the character '.';
+- contain the character ```.```;
 - contain spaces;
 - (consequence) present leading or trailing whitespaces;
 
@@ -183,10 +185,10 @@ undefined;
 ### Tools
 
 MFTK provides the following functions to deal with utilities :
-- mftk.utility.register(util_name) : registers an utility to mftk;
-- mftk.utility.require(util_name) : fails if an utility is not registered to 
+- ```mftk.utility.register(util_name)``` : registers an utility to mftk;
+- ```mftk.utility.require(util_name)``` : fails if an utility is not registered to 
 mftk;
-- mftk.utility.define(util_name,var_name,var_value) : defines the argument 
-variable "util_name.var_name" and sets it to var_value
-- mftk.utility.execute(util_name) : includes the utility's makefile, and 
+- ```mftk.utility.define(util_name,var_name,var_value)``` : defines the argument 
+variable `util_name.var_name` and sets it to var_value
+- ```mftk.utility.execute(util_name)``` : includes the utility's makefile, and 
 undefines any argument variable defined with mftk.utility.define;
