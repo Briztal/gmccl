@@ -1,11 +1,9 @@
-
+#arch_info.mfu - mftk - GPLV3, copyleft 2019 Raphael Outhier;
 
 #----------------------------------------------------------- prerequisites check
-#TODO VARIABLES CHECKUP, CONTENT, SPACES, WORDS
 
 #If the target was not provided, fail;
-$(eval $(call REQ_DEF_VAR,ai__target,build_base))
-
+$(eval $(call REQ_DEF_VAR,arch_info.target,build_base))
 
 #---------------------------------------------------------------- variables init
 
@@ -18,30 +16,26 @@ PROC_IBUS_SIZE :=
 PROC_DBUS_SIZE :=
 PROC_ENDIANNESS :=
 
-
 #--------------------------------------------------------------- local variables
 
 #Our curent directory;
-ai__cdir := $(dir $(lastword $(MAKEFILE_LIST)))
-
+arch_info.cdir := $(dir $(lastword $(MAKEFILE_LIST)))
 
 #--------------------------------------------------------------- cross make call
 
 #Cross make is used, with the arch environment;
-$(eval $(call UTIL_DEF_VAR,cross_make,cm__env,arch))
+$(eval $(call mftk.utility.define,cross_make,env,arch))
 
 #Provide the external directory;
-$(eval $(call UTIL_DEF_VAR,cross_make,cm__ext_dir,$(ai__cdir).))
+$(eval $(call mftk.utility.define,cross_make,ext_dir,$(arch_info.cdir).))
 
 #Transfer the target;
-$(eval $(call UTIL_DEF_VAR,cross_make,cm__target,$(ai__target)))
+$(eval $(call mftk.utility.define,cross_make,target,$(arch_info.target)))
 
 #Call cross make;
-$(eval $(call UTIL_CALL,cross_make))
-
+$(eval $(call mftk.utility.execute,cross_make))
 
 #---------------------------------------------------------- arch variables check
-
 
 #Memory related variables must have been defined;
 
@@ -61,7 +55,6 @@ ifndef MEM_RAM_SIZE
 $(error makefiles did not define the ram size)
 endif
 
-
 #Proc related variables must have been defined;
 
 ifndef PROC_IBUS_SIZE
@@ -76,7 +69,6 @@ ifndef PROC_ENDIANNESS
 $(error makefiles did not define the processor endianness)
 endif
 
-
 #----------------------------------------------------------------------- cleanup
 
-undefine ai__cdir
+undefine arch_info.cdir

@@ -1,4 +1,4 @@
 
 #The arm-none-eabi build_env will be used;
-tc__type := GCC_X86
+toolchain.type := GCC_X86
 

@@ -1,5 +1,4 @@
-
-#include <sys/stat.h>
+/*generator.c - mftk - GPLV3, copyleft 2019 Raphael Outhier;*/
 
 #include <string.h>
 
@@ -8,7 +7,6 @@
 #include <stdlib.h>
 
 #include "generator.h"
-
 
 #define hd_error(msg) {printf(#msg);exit(1);}
 
@@ -30,7 +28,7 @@ int main(int argc, char *argv[])
 	size_t dir_len;
 	char *mpath;
 	char *mpath_name;
-	struct zbaff_env env;
+	struct gen_env env;
 	FILE *f;
 	char c;
 	

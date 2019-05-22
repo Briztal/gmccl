@@ -1,3 +1,5 @@
+/*generator.c - mftk - GPLV3, copyleft 2019 Raphael Outhier;*/
+
 #include "generator.h"
 
 #include <string.h>
@@ -7,7 +9,7 @@
 #include <stdio.h>
 
 
-static void parsing_error(struct zbaff_parsing *p, const char *msg)
+static void parsing_error(struct gen_parsing *p, const char *msg)
 {
 	
 	printf("error at position %d - %d : ",
@@ -18,7 +20,7 @@ static void parsing_error(struct zbaff_parsing *p, const char *msg)
 	
 }
 
-static void reset_words(struct zbaff_parsing *p)
+static void reset_words(struct gen_parsing *p)
 {
 	
 	/*Reset the number of words;*/
@@ -33,7 +35,7 @@ static void reset_words(struct zbaff_parsing *p)
 }
 
 
-static void save_word(struct zbaff_parsing *p)
+static void save_word(struct gen_parsing *p)
 {
 	
 	size_t word_id;
@@ -71,7 +73,7 @@ static void save_word(struct zbaff_parsing *p)
 }
 
 
-static void save_char(struct zbaff_parsing *p, const char c)
+static void save_char(struct gen_parsing *p, const char c)
 {
 	char *ref;
 	size_t csize;
@@ -106,15 +108,15 @@ static void save_char(struct zbaff_parsing *p, const char c)
 }
 
 
-static void create_makefile(struct zbaff_env *ev)
+static void create_makefile(struct gen_env *ev)
 {
 	
 	size_t nb_words;
 	const char *words;
 	const size_t *sizes;
 	size_t dep_id;
-	struct zbaff_mf *mf;
-	struct zbaff_parsing *p;
+	struct gen_mf *mf;
+	struct gen_parsing *p;
 	FILE *f;
 	
 	mf = &(ev->e_mf);
@@ -176,7 +178,7 @@ static void create_makefile(struct zbaff_env *ev)
 
 /*Initialise an environment;*/
 void zbaff_env_init(
-	struct zbaff_env *env,
+	struct gen_env *env,
 	char *mpath,
 	char *mpath_name,
 	char *idir_vname,
@@ -199,10 +201,10 @@ void zbaff_env_init(
 	
 }
 
-bool zbaff_parse(struct zbaff_env *ev, char c)
+bool zbaff_parse(struct gen_env *ev, char c)
 {
 	
-	struct zbaff_parsing *p = &ev->e_parsing;
+	struct gen_parsing *p = &ev->e_parsing;
 	
 	/*If the end of the file is reached :*/
 	if (c == EOF) {

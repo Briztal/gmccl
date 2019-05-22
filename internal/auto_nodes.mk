@@ -1,1 +1,1 @@
-$(eval $(call NODE_REGISTER,nostd,/root/projects/nostd/nostd.mfn))
+$(eval $(call mftk.node.register,nostd,/root/projects/nostd/nostd.mfn))

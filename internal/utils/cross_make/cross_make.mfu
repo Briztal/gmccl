@@ -1,37 +1,30 @@
-#
-# TODO Document the project;
-#
-
+#cross_make.mfu - mftk - GPLV3, copyleft 2019 Raphael Outhier;
 
 #----------------------------------------------------------- prerequisites check
 
-#TODO VARIABLES CHECKUP, CONTENT, SPACES, WORDS
-
-$(info [cross_make] entering : ($(cm__env),$(cm__ext_dir),$(cm__target)))
+$(info [cross_make] entering : ($(cross_make.environment),$(cross_make.directory),$(cross_make.target)))
 
 #If the environment was not provided, fail;
-$(eval $(call REQ_DEF_VAR,cm__env,cross_make))
+$(eval $(call REQ_DEF_VAR,cross_make.environment,cross_make))
 
 #If the external directory was not provided, fail;
-$(eval $(call REQ_DEF_VAR,cm__ext_dir,cross_make))
+$(eval $(call REQ_DEF_VAR,cross_make.directory,cross_make))
 
 #If the target is not provided, fail;
-$(eval $(call REQ_DEF_VAR,cm__target,cross_make))
-
+$(eval $(call REQ_DEF_VAR,cross_make.target,cross_make))
 
 #Determine the current directory;
-cm__int_dir := $(dir $(lastword $(MAKEFILE_LIST)))env/$(cm__env)
+cross_make.int_dir := $(dir $(lastword $(MAKEFILE_LIST)))env/$(cross_make.environment)
 
 #--------------------------------------------------------------- target makefile
 
 #Include the target makefile, that will include all internal and external
 # dependencies; If the target doesn't exist, an error will occur;
-include $(cm__int_dir)/$(cm__target).mk
-
+include $(cross_make.int_dir)/$(cross_make.target).mk
 
 #----------------------------------------------------------------------- cleanup
 
 #undefine locals;
-undefine cm__int_dir
+undefine cross_make.int_dir
 
 $(info [cross_make] leaving)

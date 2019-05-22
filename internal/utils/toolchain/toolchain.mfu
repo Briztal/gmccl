@@ -1,63 +1,58 @@
-
+#toolchain.mfu - mftk - GPLV3, copyleft 2019 Raphael Outhier;
 
 #----------------------------------------------------------- prerequisites check
 
 #If the target was not provided, fail;
-$(eval $(call REQ_DEF_VAR,tc__target,toolchain))
+$(eval $(call REQ_DEF_VAR,toolchain.target,toolchain))
 
 #--------------------------------------------------------------------------- log
 
 #Display the name of the entry architecture;
-$(info [toolchain] entering : ($(tc__target)))
+$(info [toolchain] entering : ($(toolchain.target)))
 
 #---------------------------------------------------------------- variables init
 
 #All variables updated by the script are reset;
-tc__type :=
-$(tc__prefix)CC :=
-$(tc__prefix)LD :=
-$(tc__prefix)AR :=
-$(tc__prefix)OC :=
-$(tc__prefix)OD :=
-$(tc__prefix)RE :=
-$(tc__prefix)CFLAGS :=
-$(tc__prefix)LDFLAGS :=
+toolchain.type :=
+$(toolchain.prefix)CC :=
+$(toolchain.prefix)LD :=
+$(toolchain.prefix)AR :=
+$(toolchain.prefix)OC :=
+$(toolchain.prefix)OD :=
+$(toolchain.prefix)RE :=
+$(toolchain.prefix)CFLAGS :=
+$(toolchain.prefix)LDFLAGS :=
 
 #--------------------------------------------------------------- local variables
 
 #Our curent directory;
-tc__cdir := $(dir $(lastword $(MAKEFILE_LIST)))
-
+toolchain.cdir := $(dir $(lastword $(MAKEFILE_LIST)))
 
 #--------------------------------------------------------------- cross make call
 
 #Cross make is used, with the arch environment;
-$(eval $(call UTIL_DEF_VAR,cross_make,cm__env,arch))
+$(eval $(call mftk.utility.define,cross_make,environment,arch))
 
 #Provide the external directory;
-$(eval $(call UTIL_DEF_VAR,cross_make,cm__ext_dir,$(tc__cdir).))
+$(eval $(call mftk.utility.define,cross_make,directory,$(toolchain.cdir).))
 
 #Transfer the target;
-$(eval $(call UTIL_DEF_VAR,cross_make,cm__target,$(tc__target)))
+$(eval $(call mftk.utility.define,cross_make,target,$(toolchain.target)))
 
 #Call cross make;
-$(eval $(call UTIL_CALL,cross_make))
-
+$(eval $(call mftk.utility.execute,cross_make))
 
 #---------------------------------------------------------- arch variables check
 
-#Arch makefiles must mandatorily have defined the toolchain type;
-ifndef tc__type
+#Arch makefiles must have defined the toolchain type;
+ifndef toolchain.type
 $(error makefiles did not define the toolchain type)
 endif
-
-
 
 #---------------------------------------------------------- toolchain definition
 
 #include the toolchain file, that will define all toolchain related variables;
-include $(tc__cdir)toolchains_list.mk
-
+include $(toolchain.cdir)toolchains_list.mk
 
 #-------------------------------------------------------------- toolchain checks
 
@@ -68,38 +63,36 @@ include $(tc__cdir)toolchains_list.mk
 # - OC : (objcopy) the elf copier;
 # - OD : (objdump) the elf dumper;
 # - RD : (readelf) the elf reader;
-#All names can be prefixed, by defining tc__prefix
+#All names can be prefixed, by defining toolchain.prefix
 
-
-ifndef $(tc__prefix)CC
-$(error the toolchain makefile did not define $(tc__prefix)CC (C compiler))
+ifndef $(toolchain.prefix)CC
+$(error the toolchain makefile did not define $(toolchain.prefix)CC (C compiler))
 endif
 
-ifndef $(tc__prefix)LD
-$(error the toolchain makefile did not define $(tc__prefix)LD (elf linker))
+ifndef $(toolchain.prefix)LD
+$(error the toolchain makefile did not define $(toolchain.prefix)LD (elf linker))
 endif
 
-ifndef $(tc__prefix)AR
-$(error the toolchain makefile did not define $(tc__prefix)AR (archiver))
+ifndef $(toolchain.prefix)AR
+$(error the toolchain makefile did not define $(toolchain.prefix)AR (archiver))
 endif
 
-ifndef $(tc__prefix)OC
-$(error the toolchain makefile did not define $(tc__prefix)OC (objcopy))
+ifndef $(toolchain.prefix)OC
+$(error the toolchain makefile did not define $(toolchain.prefix)OC (objcopy))
 endif
 
-ifndef $(tc__prefix)OD
-$(error the toolchain makefile did not define $(tc__prefix)OD (objdump))
+ifndef $(toolchain.prefix)OD
+$(error the toolchain makefile did not define $(toolchain.prefix)OD (objdump))
 endif
 
-ifndef $(tc__prefix)RE
-$(error the toolchain makefile did not define $(tc__prefix)RE (readelf))
+ifndef $(toolchain.prefix)RE
+$(error the toolchain makefile did not define $(toolchain.prefix)RE (readelf))
 endif
-
 
 #----------------------------------------------------------------------- cleanup
 
-undefine tc__cdir
-undefine tc__type
+undefine toolchain.cdir
+undefine toolchain.type
 
 #--------------------------------------------------------------------------- log
 $(info [toolchain] leaving)

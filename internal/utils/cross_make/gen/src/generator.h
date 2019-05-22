@@ -1,3 +1,5 @@
+/*generator.h - mftk - GPLV3, copyleft 2019 Raphael Outhier;*/
+
 #include <stdbool.h>
 
 #include <stdint.h>
@@ -11,11 +13,11 @@
 
 
 /**
- * zbaff_mf_dsc : contains all data required to properly generate
+ * gen_mf : contains all data required to properly generate
  *  makefiles;
  */
 
-struct zbaff_mf {
+struct gen_mf {
 	
 	/*Makefile path container; Large enough to contain any makefile path;*/
 	char *m_mpath;
@@ -33,11 +35,11 @@ struct zbaff_mf {
 
 
 /** 
- * zbaff_parsing : contains the parsing context; it stores words and status
+ * gen_parsing : contains the parsing context; it stores words and status
  *  variables;
  */
 
-struct zbaff_parsing {
+struct gen_parsing {
 	
 	
 	/*Lines from the beginning of the file;*/
@@ -65,24 +67,24 @@ struct zbaff_parsing {
 
 
 /**
- * zbaff_env : contains a parsing environment, and data required to properly 
+ * gen_env : contains a parsing environment, and data required to properly
  *  generate the related makefile;
  */
 
-struct zbaff_env {
+struct gen_env {
 	
 	/*The makefile generation environment;*/
-	struct zbaff_mf e_mf;
+	struct gen_mf e_mf;
 	
 	/*The parsing context;*/
-	struct zbaff_parsing e_parsing;
+	struct gen_parsing e_parsing;
 	
 };
 
 
 /*Initialise an environment;*/
 void zbaff_env_init(
-	struct zbaff_env *env,
+	struct gen_env *env,
 	char *mpath,
 	char *mpath_name,
 	char *idir_vname,
@@ -91,7 +93,7 @@ void zbaff_env_init(
 
 
 /*Parse a character;*/
-bool zbaff_parse(struct zbaff_env *env, char c);
+bool zbaff_parse(struct gen_env *env, char c);
 
 
 

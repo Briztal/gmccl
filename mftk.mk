@@ -1,18 +1,12 @@
+#mftk.mk - mftk - GPLV3, copyleft 2019 Raphael Outhier;
+
 #------------------------------------------------------------------- directories
 
 #Report mftk is used and provided;
-export __MFTK__ := $(lastword $(MAKEFILE_LIST))
+__MFTK__ := $(lastword $(MAKEFILE_LIST))
 
 #Determine mftk's internal directory
 __MFTK_IDIR__ =  $(dir $(__MFTK__))internal
-
-#TODO USE $0 INSTEAD OF FUNCTION NAME 
-#TODO USE $0 INSTEAD OF FUNCTION NAME 
-#TODO USE $0 INSTEAD OF FUNCTION NAME 
-#TODO USE $0 INSTEAD OF FUNCTION NAME 
-#TODO USE $0 INSTEAD OF FUNCTION NAME 
-#TODO USE $0 INSTEAD OF FUNCTION NAME 
-
 
 #------------------------------------------------------------------ error report
 
@@ -38,12 +32,16 @@ endif
 endef
 
 #If the variable $1 is not defined, specific error message;
-mftk.require_defined = $(call mftk.ndef_error,$1,In $2 : variable $1 not defined)
+define mftk.require_defined
+$(call mftk.ndef_error,$1,In $2 : variable $1 not defined)
+endef
 
 #If the variable $1 is defined, specific error message;
-mftk.require_undefined = $(call mftk.def_error,$1,In $2 : variable $1 already defined)
+define mftk.require_undefined
+$(call mftk.def_error,$1,In $2 : variable $1 already defined)
+endef
 
-#If $1 is empty, is not a single word, or has leading or trailing whitespaced,
+#If $1 is empty, is not a single word, or has leading or trailing whitespaces,
 # an error is reported relatively to context ($2,$3)
 define mftk.check_word
 ifeq ($1,)
@@ -66,7 +64,6 @@ $$(error in $2 : '.' character in $3)
 endif
 endef
 
-
 #--------------------------------------------------------------- build utilities
 
 define mftk.undefine_var
@@ -84,26 +81,26 @@ endef
 #  2 : the path to the utility's entry makefile;
 #
 # defined vars :
-#  __UTIL_$1_PATH__
-#  __UTIL_$1__VARS__
+#  mftk.utils.$1.path
+#  mftk.utils.$1.names
 
 define mftk.utility.register
 
 #Check that the utility name is a valid name;
-$(call mftk.check_name,$1,mftk.utility.register,utility name)
+$(call mftk.check_name,$1,$0,utility name)
 
 #Check that the makefile path is a valid word;
-$(call mftk.check_word,$2,mftk.utility.register,makefile path)
+$(call mftk.check_word,$2,$0,makefile path)
 
 #Check that the utility's entry makefile path variable is not defined;
-$(call mftk.require_undefined,__UTIL_$1_PATH__,mftk.utility.register)
+$(call mftk.require_undefined,mftk.utils.$1.path,$0)
 
 #Check that the utility's variable list is not defined;
-$(call mftk.require_undefined,__UTIL_$1_NAMES__,mftk.utility.register)
+$(call mftk.require_undefined,mftk.utils.$1.names,$0)
 
 #Initialize the couple of variables;
-__UTIL_$1_PATH__ := $2
-__UTIL_$1_NAMES__ :=
+mftk.utils.$1.path := $2
+mftk.utils.$1.names :=
 
 endef
 
@@ -113,14 +110,14 @@ endef
 #  1 : the name of the utility;
 #
 # used vars :
-#  __UTIL_$1_PATH__
+#  mftk.utils.$1.path
 define mftk.utility.require
 
 #Check that the utility name is a valid name;
-$(call mftk.check_name,$1,mftk.utility.require,utility name))
+$(call mftk.check_name,$1,$0,utility name))
 
 #If the utility path is not defined, fail;
-$(call mftk.require_defined,__UTIL_$1_PATH__,in mftk.utility.require : module $1 not registered;)
+$(call mftk.require_defined,mftk.utils.$1.path,in $0 : utility $1 not registered;)
 
 endef
 
@@ -142,31 +139,31 @@ include $(__MFTK_IDIR__)/auto_utils.mk
 #  $1
 #
 # used vars :
-#  __UTIL_$1_PATH__
-#  __UTIL_$1_NAMES__
+#  mftk.utils.$1.path
+#  mftk.utils.$1.names
 #
-define mftk.utility.define_var
+define mftk.utility.define
 
 #Check that the utility name is a valid word;
-$(call mftk.check_word,$1,mftk.utility.define_var,utility name)
+$(call mftk.check_word,$1,$0,utility name)
 
 #Check that the utility exists;
-$(call mftk.require_defined,__UTIL_$1_PATH__,mftk.utility.define_var)
+$(call mftk.require_defined,mftk.utils.$1.path,$0)
 
 #Check that the variable name is a valid word;
-$(call mftk.check_word,$2,mftk.utility.define_var,variable name)
+$(call mftk.check_word,$2,$0,variable name)
 
 #Check that the variable don't already exist;
-$(call mftk.require_undefined,$2,mftk.utility.define_var)
+$(call mftk.require_undefined,$2,$0)
 
 #Check that the variable value is not empty;
-$(call mftk.empty_error,$2,mftk.utility.define_var,variable value)
+$(call mftk.empty_error,$2,$0,variable value)
 
 #Add the variable to the utility's variable list;
-__UTIL_$1_NAMES__ += $2
+mftk.utils.$1.names += $2
 
 #define the variable;
-$2 := $3
+$1.$2 := $3
 
 endef
 
@@ -179,28 +176,28 @@ endef
 #  1 : the name of the utility;
 #
 # used vars :
-#  __UTIL_$1_PATH__
-#  __UTIL_$1_NAMES__
+#  mftk.utils.$1.path
+#  mftk.utils.$1.names
 #
 define mftk.utility.execute
 
 #Check that the utility name is a valid word;
-$(call mftk.check_word,$1,mftk.utility.execute,utility name)
+$(call mftk.check_word,$1,$0,utility name)
 
 #Check that the utility exists;
-$(call mftk.require_defined,__UTIL_$1_PATH__,mftk.utility.execute)
+$(call mftk.require_defined,mftk.utils.$1.path,$0)
 
 #include the entry makefile of the utility;
-include $(__UTIL_$1_PATH__)
+include $(mftk.utils.$1.path)
 
 #If the utility's variable list is not empty :
-ifneq ($(__UTIL_$1_NAMES__),)
+ifneq ($(mftk.utils.$1.names),)
 
 #Undefine all variables in the list; Eval ensures that it is done sequentially;
-$$(eval $$(call mftk.undefine_list,__UTIL_$1_NAMES__))
+$$(eval $$(call mftk.undefine_list,mftk.utils.$1.names))
 
 #Reset the list;
-__UTIL_$1_NAMES__ :=
+mftk.utils.$1.names :=
 
 endif
 
@@ -217,31 +214,27 @@ endef
 #  2 : the path to the node's entry makefile;
 #
 # used variables :
-#  __NODE_$1_PATH__ : the path to the node's entry makefile;
+#  mftk.nodes.$1.path : the path to the node's entry makefile;
 #
 
 define mftk.node.register
 
 #Check that the node name is a valid word;
-$(call mftk.check_word,$1,mftk.node.register,node name)
+$(call mftk.check_word,$1,$0,node name)
 
 #Check that the makefile path is a valid word;
-$(call mftk.check_word,$2,mftk.node.register,makefile path)
+$(call mftk.check_word,$2,$0,makefile path)
 
 #Check that the node is not already defines;
-$(call mftk.require_undefined,__NODE_$1_PATH__,mftk.node.register)
+$(call mftk.require_undefined,mftk.nodes.$1.path,$0)
 
 #Define the path variable;
-__NODE_$1_PATH__ := $2
+mftk.nodes.$1.path := $2
 
 endef
 
-
 #Register build nodes;
 include $(__MFTK_IDIR__)/auto_nodes.mk
-
-#Registration macros are useless now, they are undefined;
-undefine mftk.node.register
 
 
 
@@ -258,47 +251,42 @@ undefine mftk.node.register
 #  4 : the value of the variable to define;
 #
 # used variables :
-#  __NODE_$1_PATH__ : the node's entry makefile path;
-#  __NODE_$1_$2_NAMES__ : the list of variables names;
-#  __NODE_$1_$2_DEFS__ : the list of variables definitions;
+#  mftk.nodes.$1.path : the node's entry makefile path;
+#  mftk.nodes.$1.$2.names : the list of variables names;
+#  mftk.nodes.$1.$2.defs : the list of variables definitions;
 #
-define mftk.node.define_var
+define mftk.node.define
 
 #Check that the node name is a valid word;
-$(call mftk.check_word,$1,mftk.node.define_var,node name)
+$(call mftk.check_word,$1,$0,node name)
 
 #Check that the variable set name is a valid word;
-$(call mftk.check_word,$2,mftk.node.define_var,variabel set name)
+$(call mftk.check_word,$2,$0,variable set name)
 
 #Check that the variable name is a valid word;
-$(call mftk.check_word,$3,mftk.node.define_var,variable name)
+$(call mftk.check_word,$3,$0,variable name)
 
 #Check that the node is registered;
-$(call mftk.require_defined,__NODE_$1_PATH__,mftk.node.define_var)
+$(call mftk.require_defined,mftk.nodes.$1.path,$0)
 
 #Check that the variable does not exist;
-ifneq ($(findstring $3,__NODE_$1_$2_NAMES__),)
-$$(error in mftk.node.define_var : variable $3 already defined))
+ifneq ($(findstring $3,mftk.nodes.$1.$2.names),)
+$$(error in $0 : variable $3 already defined))
 endif
 
 #Check that the variable value is not empty;
-$(call mftk.empty_error,$4,mftk.node.define_var,variable value)
+$(call mftk.empty_error,$4,$0,variable value)
 
 #If the names list doesn't exist, define it;
-ifndef __NODE_$1_$2_NAMES__
-__NODE_$1_$2_NAMES__ :=
-endif
-
-#If the def list doesn't exist, define it;
-ifndef __NODE_$1_$2_DEFS__
-__NODE_$1_$2_DEFS__ :=
+ifndef mftk.nodes.$1.$2.names
+mftk.nodes.$1.$2.names :=
 endif
 
 #Add the variable name to the names list;
-__NODE_$1_$2_NAMES__ += $3
+mftk.nodes.$1.$2.names += $3
 
 #Add the variable definition to the def list;
-__NODE_$1_$2_DEFS__ += $3=$4
+mftk.nodes.$1.$2.defs += $1.$3=$4
 
 endef
 
@@ -309,25 +297,24 @@ endef
 #
 # parameters :
 #  1 : the name of the node;
-#  2 : the name of the rule to execute;
-#  3 : the name of the node variable set;
+#  2 : the name of the node variable set;
 #
 # used variables :
-#  __NODE_$1_PATH__ : the path to the node's entry makefile;
+#  mftk.nodes.$1.path : the path to the node's entry makefile;
 #
-define mftk.node.check
+define mftk.node.execute_check
 
 #Check that the node name is a valid word;
-$(call mftk.check_word,$1,mftk.node.call,node name)
+$(call mftk.check_word,$1,$0,node name)
 
 #Check that the variable set name is a valid word;
-$(call mftk.check_word,$2,mftk.node.call,variabel set name)
+$(call mftk.check_word,$2,$0,variable set name)
 
 #Check that the variable set name is a valid word;
-$(call mftk.check_word,$3,mftk.node.call,variabel name)
+$(call mftk.check_word,$2,$0,variable name)
 
 #Check that the node is registered;
-$(call mftk.require_defined,__NODE_$1_PATH__,mftk.node.call)
+$(call mftk.require_defined,mftk.nodes.$1.path,$0)
 
 endef
 
@@ -340,24 +327,25 @@ endef
 #
 # parameters :
 #  1 : the name of the node;
-#  2 : the name of the rule to execute;
-#  3 : the name of the node variable set;
+#  2 : the name of the node variable set;
+#  3 : the name of the rule to execute;
 #  4 : optional make parameters;
 #
 # used variables :
-#  __NODE_$1_PATH__ : the path to the node's entry makefile;
-#  __NODE_$1__$3_DEFS__ : the list of variables definitions;
+#  mftk.nodes.$1.path : the path to the node's entry makefile;
+#  mftk.nodes.$1.$2.defs : the list of variables definitions;
 #
-define mftk.node.call
-$(eval $(call mftk.node.check,$1,$2,$3))
-$(MAKE) -f $(__NODE_$1_PATH__) $2 $(__NODE_$1_$3_DEFS__) $4
+define mftk.node.execute
+$(eval $(call mftk.node.execute_check,$1,$2))
+$(MAKE) -f $(mftk.nodes.$1.path) $3 $(mftk.nodes.$1.$2.defs) __MFTK__=$(__MFTK__) $4
 endef
 
 
-#----------------------------------------------------------------- Undefinitions
+#----------------------------------------------------------------- undefinitions
+
 #Registration macros are not to be used anymore;
-undefine mftk.utility.register
-undefine mftk.node.register
+#undefine mftk.utility.register
+#undefine mftk.node.register
 
 #The root directory is not to be used anymore;
-undefine __MFTK_IDIR__
+#undefine __MFTK_IDIR__

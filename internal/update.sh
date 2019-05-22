@@ -1,14 +1,15 @@
 #!/bin/bash
+#update.sh - mftk - GPLV3, copyleft 2019 Raphael Outhier;
 
 mfdir=$(dirname "$0")/..
 
-if [[ ! -f ${mfdir}/search_dirs ]]
+if [[ ! -f ${mfdir}/search_dirs.txt ]]
 then
-    echo "Error : ${mfdir}/search_dirs not existing"
+    echo "Error : ${mfdir}/search_dirs.txt not existing"
     exit 1
 fi
 
-dr=$(cat ${mfdir}/search_dirs)
+dr=$(cat ${mfdir}/search_dirs.txt)
 
 rm ${mfdir}/internal/auto_utils.mk
 rm ${mfdir}/internal/auto_nodes.mk
@@ -56,7 +57,7 @@ do
 
                     echo "Registering utility ${name}"
 
-                    echo '$(eval $(call UTIL_REGISTER,'${name},${e}'))' >> ${mfdir}/internal/auto_utils.mk
+                    echo '$(eval $(call mftk.utility.register,'${name},${e}'))' >> ${mfdir}/internal/auto_utils.mk
 
                 else
                     echo "Skipping registered utility ${name}"
@@ -73,7 +74,7 @@ do
 
         entries=$(find ${d}/ -maxdepth 2 -name "*.mfn")
 
-        if test ${entries}
+        if test "${entries}"
             then
 
             echo "Node entries found"
@@ -89,7 +90,7 @@ do
 
                     echo "Registering node ${name}"
 
-                    echo '$(eval $(call NODE_REGISTER,'${name},${e}'))' >> ${mfdir}/internal/auto_nodes.mk
+                    echo '$(eval $(call mftk.node.register,'${name},${e}'))' >> ${mfdir}/internal/auto_nodes.mk
                 else
 
                     echo "Skipping registered node ${name}"
