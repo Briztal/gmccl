@@ -117,11 +117,9 @@ definition will override definitions with the same name.
 As stated earlier, makefiles variables or functions names can contain any 
 character except ```=``` ```#``` or ```:```, and in particular, they can 
 contain```.```.
-
 To tackle the previous issue, as it defines multiple functions and internal 
 variables, mftk uses namespaces, taking advantage of the possibility to include 
 ```.``` in names.
-
 A variable will be said to be in the namespace of ```B``` (with ```B```
 containing eventually one or several ```.```) if the variable has the prefix
 ```B.``` in its name.
