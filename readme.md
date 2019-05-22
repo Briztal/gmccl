@@ -1,4 +1,4 @@
-#MFTK
+# MFTK
 
 MFTK is a set of makefile functions, defined in mftk.mk, that aim to provide 
 a makefile interface to enhance projects interoperability;
@@ -20,9 +20,9 @@ MFTK provides built-in utilities, namely :
 Both toolchain and arch_info are using cross-make;
 
 
-##In brief
+## In brief
 
-###Downloading MFTK
+### Downloading MFTK
 
 To use mftk, download the source code, and update the environment with :
 
@@ -32,11 +32,11 @@ git pull https://github.com/Briztal/mftk mftk
 
 This will clone the project in your file system;
 
-###Configuring MFTK
+### Configuring MFTK
 
 The following steps can be re-done any time you need with no restriction;
 
-####Search directories
+#### Search directories
 
 You need to tell mftk where it should search for your makefile utilities and 
 nodes;
@@ -44,7 +44,7 @@ To do this, add paths you want it to search in in the `search_dirs` file;
 The search is of depth 1, meaning that mftk will not search recursively in the 
 provided directories;
 
-####Environments setup
+#### Environments setup
 
 When using the cross_make utility, you must specify which environment you 
 want to use; 
@@ -54,7 +54,7 @@ Environment description files are located in `internal/utils/cross_make/desc`
 You are free to add and modify any environment description file; By default, 
 only the arch environment is provided.
 
-####Update
+#### Update
 
 When you have configured mftk, you must update it so your modifications are 
 applied;
@@ -78,7 +78,7 @@ registrations in `internal/auto_utils.mk` and `internal/auto_nodes.mk`;
 When mftk has been updated, you can use it freely
 
 
-###Including MFTK
+### Including MFTK
 
 To use mftk in one of your makefiles, include the file `mftk.mk` present in 
 the project's main directory; 
@@ -86,7 +86,7 @@ Your makefile will then have access to all MFTK's features, and will be able
 to execute utilities and nodes;
 
 
-##A brief reminder about makefiles;
+## A brief reminder about makefiles;
 
 variables : a variable is a makefile string containing any character except 
 ':' '#' or '=', that refers to another string; 
@@ -109,7 +109,7 @@ god-blessed $(eval $(call func_name,arg1,arg2,...)) that expands the provided
 function and interprets the result as makefile syntax;
 
 
-##Naming policy
+## Naming policy
 
 
 When dealing with sub-makes, by make sub-call or inclusion, using variables 
@@ -117,7 +117,7 @@ can get messy, as variables with temporary use may have simple name (clearly,
 try avoiding foo = 1), and make doesn't recognise the notion of context : any 
 definition will override definitions with the same name;
 
-###Namespaces
+### Namespaces
 
 As stated earlier, makefiles variables or functions names can contain any 
 character except '=' '#' or ':', and in particular, they can contain '.'.
@@ -148,7 +148,7 @@ to their respective functions, ensure that the naming policy is respected for
 all relevant arguments;
 
 
-##Makefile Utility
+## Makefile Utility
 
 A makefile utility is a standalone makefile, that requires arguments, and aims 
 to provide any information that has a meaning in the first execution phase of 
@@ -157,7 +157,7 @@ Its usage is limited to make's first phase of execution, meaning that
 using any mftk's utilities function is forbidden in a rule (first because it
 makes no sense, and then because the execution would fail);
 
-###Registration
+### Registration
 
 A makefile utility is registered automatically at the initialization of mftk. 
 A registered utility can't be unregistered;
@@ -165,14 +165,14 @@ At its registration, a makefile utility provides its name that must be unique,
 and the path for its entry makefile;
 No utility function can be called on an unregistered utility.
 
-###Arguments
+### Arguments
 
 A makefile utility receives arguments, in the form of variables with names 
 that follow mftk's naming policy, that are used to control its behaviour;
 For example, the toolchain utility requires the variable toolchain.target, 
 providing the architecture for which the toolchain should be selected;
 
-###Behavior
+### Behavior
 
 When called, a makefile utility may define variables, update variables, 
 define rules, print data, include other makefiles, or do any other action 
@@ -180,7 +180,7 @@ related to make's first execution phase;
 After the makefile is called, any variable in his namespace is automatically 
 undefined;
 
-###Tools
+### Tools
 
 MFTK provides the following functions to deal with utilities :
 - mftk.utility.register(util_name) : registers an utility to mftk;
