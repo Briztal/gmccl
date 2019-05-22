@@ -4,18 +4,18 @@ MFTK is a set of makefile functions, defined in mftk.mk, that aims to provide
 a makefile interface to enhance projects interoperability.
 
 It does it by defining two high level concepts :
-- makefile utility : an utility only concerns the first execution phase of make, 
+- **the makefile utility** : an utility only concerns the first execution phase of make, 
 when the makefile tree is parsed.;
 Based on makefile inclusion, it aims to provide build information to the 
 makefile that executes it;
-- makefile node: a node concerns the second execution phase of make, when 
+- **the makefile node** : a node concerns the second execution phase of make, when 
 rules are called; 
 Based on makefile sub-call, it aims to execute a complete step of build;
 
 MFTK provides built-in utilities, namely :
-- cross-make : an architecture dependent makefile inclusion utility; 
-- toolchain : a toolchain selection utility for cross compilation;
-- arch-info : an architecture information provider;
+- **cross-make** : an architecture dependent makefile inclusion utility; 
+- **toolchain** : a toolchain selection utility for cross compilation;
+- **arch-info** : an architecture information provider;
 
 Both toolchain and arch_info are using cross-make.
 
@@ -86,14 +86,14 @@ to execute utilities and nodes.
 ## A brief reminder about makefiles;
 
 variables : a variable is a makefile string containing any character except 
-```=``` ```=``` or ```=```, that refers to another string.
-It can be defined directly using an assignment operator (**=**,  **?=**, **+=**
- ...), or indirectly using keywords ```define ... endef```.
-Later, it can be referred to using $([variable_name])
+```=``` ```#``` or ```:```, that refers to another string.
+It can be defined directly using an assignment operator (```=```,  ```?=```, 
+```+=``` ...), or indirectly using keywords ```define ... endef```.
+Later, it can be referred to using ```$(variable_name)```
 
 functions : a function is a variable that incorporates references to arguments 
-(temporary variables) **$(1)**, **$(2)**, etc..., that are replaced during the 
-expansion of the function.
+(temporary variables) ```$(1)```, ```$(2)```, etc..., that are replaced during
+the expansion of the function.
 It can be called using ```$(call $(func_name),arg1,arg2,...)```.
 
 eval : eval must be used when the result of the expansion of a variable / 
