@@ -66,12 +66,8 @@ endef
 
 #--------------------------------------------------------------- build utilities
 
-define mftk.undefine_var
-undefine $1
-endef
-
 define mftk.undefine_namespace
-$(foreach TMP,$(filter $1.%,$(.VARIABLES)),$$(eval $$(call mftk.undefine_var,$(TMP))))
+$(foreach TMP,$(filter $1.%,$(.VARIABLES)),$$(eval undefine $(TMP)))
 endef
 
 # Registers a makefile utility;
