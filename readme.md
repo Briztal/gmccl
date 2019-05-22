@@ -83,20 +83,20 @@ the project's main directory.
 Your makefile will then have access to all MFTK's features, and will be able 
 to execute utilities and nodes.
 
-## A brief reminder about makefiles;
+## Makefile key points reminder
 
-variables : a variable is a makefile string containing any character except 
+**variables** : a variable is a makefile string containing any character except 
 ```=``` ```#``` or ```:```, that refers to another string.
 It can be defined directly using an assignment operator (```=```,  ```?=```, 
 ```+=``` ...), or indirectly using keywords ```define ... endef```.
 Later, it can be referred to using ```$(variable_name)```
 
-functions : a function is a variable that incorporates references to arguments 
+**functions** : a function is a variable that incorporates references to arguments 
 (temporary variables) ```$(1)```, ```$(2)```, etc..., that are replaced during
 the expansion of the function.
 It can be called using ```$(call $(func_name),arg1,arg2,...)```.
 
-eval : eval must be used when the result of the expansion of a variable / 
+**eval** : eval must be used when the result of the expansion of a variable / 
 function must be interpreted by gnu-make as makefile syntax and not just 
 as variable name or content.
 Any variable / function provided to eval is expanded twice : one time as text, 
