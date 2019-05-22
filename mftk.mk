@@ -70,8 +70,8 @@ define mftk.undefine_var
 undefine $1
 endef
 
-define mftk.undefine_list
-$(foreach TMP,$($1),$(eval $(call mftk.undefine_var,$(TMP))))
+define mftk.undefine_namespace
+$(foreach TMP,$(filter $1.%,$(.VARIABLES)),$$(eval $$(call mftk.undefine_var,$(TMP))))
 endef
 
 # Registers a makefile utility;
@@ -82,7 +82,6 @@ endef
 #
 # defined vars :
 #  mftk.utils.$1.path
-#  mftk.utils.$1.names
 
 define mftk.utility.register
 
@@ -95,12 +94,8 @@ $(call mftk.check_word,$2,$0,makefile path)
 #Check that the utility's entry makefile path variable is not defined;
 $(call mftk.require_undefined,mftk.utils.$1.path,$0)
 
-#Check that the utility's variable list is not defined;
-$(call mftk.require_undefined,mftk.utils.$1.names,$0)
-
 #Initialize the couple of variables;
 mftk.utils.$1.path := $2
-mftk.utils.$1.names :=
 
 endef
 
@@ -140,7 +135,6 @@ include $(__MFTK_IDIR__)/auto_utils.mk
 #
 # used vars :
 #  mftk.utils.$1.path
-#  mftk.utils.$1.names
 #
 define mftk.utility.define
 
@@ -159,9 +153,6 @@ $(call mftk.require_undefined,$2,$0)
 #Check that the variable value is not empty;
 $(call mftk.empty_error,$2,$0,variable value)
 
-#Add the variable to the utility's variable list;
-mftk.utils.$1.names += $2
-
 #define the variable;
 $1.$2 := $3
 
@@ -177,7 +168,6 @@ endef
 #
 # used vars :
 #  mftk.utils.$1.path
-#  mftk.utils.$1.names
 #
 define mftk.utility.execute
 
@@ -190,16 +180,8 @@ $(call mftk.require_defined,mftk.utils.$1.path,$0)
 #include the entry makefile of the utility;
 include $(mftk.utils.$1.path)
 
-#If the utility's variable list is not empty :
-ifneq ($(mftk.utils.$1.names),)
-
-#Undefine all variables in the list; Eval ensures that it is done sequentially;
-$$(eval $$(call mftk.undefine_list,mftk.utils.$1.names))
-
-#Reset the list;
-mftk.utils.$1.names :=
-
-endif
+#Undefine all variables in the list;
+$(call mftk.undefine_namespace,$1)
 
 endef
 

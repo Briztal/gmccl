@@ -102,7 +102,7 @@ as variable name or content.
 Any variable / function provided to eval is expanded twice : one time as text, 
 and another time as makefile syntax.
 Its syntax is ```$(eval $(variable_name))```, with a special reference to the 
-god-blessed ```$(eval $(call func_name,arg1,arg2,...))```that expands the 
+god-blessed ```$(eval $(call func_name,arg1,arg2,...))``` that expands the 
 provided function and interprets the result as makefile syntax.
 
 ## Naming policy
