@@ -184,3 +184,72 @@ Function | Description
 **mftk.utility.require**(util_name) | fails if an utility is not registered to mftk.
 **mftk.utility.define**(util_name,var_name,var_value) | defines the argument variable util_name.var_name and sets it to var_value.
 **mftk.utility.execute**(util_name) | includes the utility's makefile, and undefines any argument variable defined with mftk.utility.define.
+
+## Makefile Node
+
+A makefile node is a standalone makefile, that requires arguments, and aims 
+to execute some implementation defined build stage;
+Its usage concerns both make's first and second phase of execution :
+- the definition of arguments regarding on a specific execution of a node are 
+made during the first phase;
+- the execution of the node, consisting of a sub make call is made in the second 
+phase, inside a rule;
+
+### Registration
+
+A makefile node is registered automatically at the initialization of mftk. 
+A registered node can't be unregistered.
+At its registration, a makefile node provides its name that must be unique
+among all nodes, and the path for its entry makefile.
+TODO utilities names uniques among all utilities;
+No node function can be called on an unregistered node.
+
+### Arguments
+
+A makefile node receives arguments, in the form of variables with names 
+that follow mftk's naming policy, that are used to control its behaviour.
+MFTK exports no variable, so any argument passed to a node is defined during
+the sub-call to make;
+
+In a user point of view arguments to be provided to a node are in its namespace :
+a variable that must be provided to a node ```A``` has to be in the namespace 
+of ```A```.
+In the MFTK internals perspective, it is a little more complex.
+Indeed, as stated earlier, arguments regarding on a specific make node execution 
+must be defined in make's first execution stage. This means that if two 
+different executions of the same node must occur, there will be two definitions
+for each variable in the first phase, and of course, only the last one will 
+be taken into account;
+To tackle this issue, the namespace of a node argument must also contain a 
+reference to the identifier of the call : a variable that must be provided 
+to a node ```A``` relatively to the execution ```i``` has to be in the namespace 
+of ```A.i```.
+When the sub-call to make is executed, any variable in the namespace of ```A.i```
+will be passed to the sub makefile, in the namespace of ```A``` 
+
+TODO PASS THE ENTIRE NAMESPACE
+
+### Behavior
+
+A makefile node execution consists on a sub-make command targetting the makefile 
+at the node's registered path;
+This sub-make command is executed in its own environment, being only provided 
+with its argument variables and the variable ```__MFTK__``` that refers to the 
+path of MFTK's makefile;
+If the node requires mftk, it must first check that mftk is provided, by testing 
+if the variable ```__MFTK__``` is defined, and then using  ```include $(__MFTK__)```
+The node being executed in a separate make call, it cannot alter the caller's
+environment by any mean; No variable or rule can be provided to the caller;
+For this purpose, an utility must be used;
+
+### Tools
+
+MFTK provides the following functions to deal with nodes :
+
+Function | Description
+---- | -------------
+**mftk.node.register**(node_name) | registers a node to mftk.
+**mftk.node.require**(node_name) | fails if a node is not registered to mftk.
+**mftk.node.define**(node_name,call_id,var_name,var_value) | defines the variable ```node_name.call_id.var_name``` and sets it to var_value. In the node's makefile, it will be redefined and accessible as ```node_name.var_name```.
+**mftk.node.execute**(node_name, call_id) | executes a sub-call to the node's makefile, providing all variables in its namespace with their proper name, then undefines any variable in the namespace ```node_name.call_id```.
+

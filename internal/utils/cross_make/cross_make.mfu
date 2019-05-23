@@ -22,9 +22,6 @@ cross_make.int_dir := $(dir $(lastword $(MAKEFILE_LIST)))env/$(cross_make.enviro
 # dependencies; If the target doesn't exist, an error will occur;
 include $(cross_make.int_dir)/$(cross_make.target).mk
 
-#----------------------------------------------------------------------- cleanup
-
-#undefine locals;
-undefine cross_make.int_dir
+#--------------------------------------------------------------------------- log
 
 $(info [cross_make] leaving)
