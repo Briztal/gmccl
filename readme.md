@@ -155,8 +155,8 @@ makes no sense, and then because the execution would fail).
 
 A makefile utility is registered automatically at the initialization of mftk. 
 A registered utility can't be unregistered.
-At its registration, a makefile utility provides its name that must be unique, 
-and the path for its entry makefile.
+At its registration, a makefile utility provides its name that must be unique
+among all utilities, and the path for its entry makefile.
 No utility function can be called on an unregistered utility.
 
 ### Arguments
@@ -201,7 +201,6 @@ A makefile node is registered automatically at the initialization of mftk.
 A registered node can't be unregistered.
 At its registration, a makefile node provides its name that must be unique
 among all nodes, and the path for its entry makefile.
-TODO utilities names uniques among all utilities;
 No node function can be called on an unregistered node.
 
 ### Arguments
@@ -220,14 +219,14 @@ must be defined in make's first execution stage. This means that if two
 different executions of the same node must occur, there will be two definitions
 for each variable in the first phase, and of course, only the last one will 
 be taken into account;
+
+
 To tackle this issue, the namespace of a node argument must also contain a 
 reference to the identifier of the call : a variable that must be provided 
 to a node ```A``` relatively to the execution ```i``` has to be in the namespace 
 of ```A.i```.
 When the sub-call to make is executed, any variable in the namespace of ```A.i```
 will be passed to the sub makefile, in the namespace of ```A``` 
-
-TODO PASS THE ENTIRE NAMESPACE
 
 ### Behavior
 
@@ -237,7 +236,13 @@ This sub-make command is executed in its own environment, being only provided
 with its argument variables and the variable ```__MFTK__``` that refers to the 
 path of MFTK's makefile;
 If the node requires mftk, it must first check that mftk is provided, by testing 
-if the variable ```__MFTK__``` is defined, and then using  ```include $(__MFTK__)```
+if the variable ```__MFTK__``` is defined, and then using : 
+
+
+```makefile
+include $(__MFTK__)
+```
+
 The node being executed in a separate make call, it cannot alter the caller's
 environment by any mean; No variable or rule can be provided to the caller;
 For this purpose, an utility must be used;
