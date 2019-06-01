@@ -2,26 +2,20 @@
 
 #----------------------------------------------------------- prerequisites check
 
-$(info [cross_make] entering : ($(cross_make.environment),$(cross_make.directory),$(cross_make.target)))
+#Util init and vars check;
+$(eval $(call mftk.util.entry,cross_make,environment directory target))
 
-#If the environment was not provided, fail;
-$(eval $(call REQ_DEF_VAR,cross_make.environment,cross_make))
+#Path check;
+$(eval $(call mftk.check.path,cross_make.directory,cross_make))
 
-#If the external directory was not provided, fail;
-$(eval $(call REQ_DEF_VAR,cross_make.directory,cross_make))
-
-#If the target is not provided, fail;
-$(eval $(call REQ_DEF_VAR,cross_make.target,cross_make))
+#-------------------------------------------------------------------------- vars
 
 #Determine the current directory;
-cross_make.int_dir := $(dir $(lastword $(MAKEFILE_LIST)))env/$(cross_make.environment)
+cross_make.int_dir := \
+	$(dir $(lastword $(MAKEFILE_LIST)))env/$(cross_make.environment)
 
 #--------------------------------------------------------------- target makefile
 
 #Include the target makefile, that will include all internal and external
 # dependencies; If the target doesn't exist, an error will occur;
 include $(cross_make.int_dir)/$(cross_make.target).mk
-
-#--------------------------------------------------------------------------- log
-
-$(info [cross_make] leaving)

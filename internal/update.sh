@@ -49,6 +49,7 @@ do
             for e in ${entries}
             do
 
+                fdir=$(dirname "${e}")
                 fname=${e##*/}
                 name=${fname%.mfu}
 
@@ -57,7 +58,7 @@ do
 
                     echo "Registering utility ${name}"
 
-                    echo '$(eval $(call mftk.utility.register,'${name},${e}'))' >> ${mfdir}/internal/auto_utils.mk
+                    echo '$(eval $(call mftk.utility.register,'${name},${fdir}'))' >> ${mfdir}/internal/auto_utils.mk
 
                 else
                     echo "Skipping registered utility ${name}"
@@ -79,9 +80,10 @@ do
 
             echo "Node entries found"
 
-            for e in "${entries}"
+            for e in ${entries}
             do
 
+                fdir=$(dirname "${e}")
                 fname=${e##*/}
                 name=${fname%.mfn}
 
@@ -90,7 +92,7 @@ do
 
                     echo "Registering node ${name}"
 
-                    echo '$(eval $(call mftk.node.register,'${name},${e}'))' >> ${mfdir}/internal/auto_nodes.mk
+                    echo '$(eval $(call mftk.node.register,'${name},${fdir}'))' >> ${mfdir}/internal/auto_nodes.mk
                 else
 
                     echo "Skipping registered node ${name}"

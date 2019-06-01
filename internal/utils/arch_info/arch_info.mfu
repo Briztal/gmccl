@@ -3,7 +3,7 @@
 #----------------------------------------------------------- prerequisites check
 
 #If the target was not provided, fail;
-$(eval $(call REQ_DEF_VAR,arch_info.target,build_base))
+$(eval $(call mftk.utility.entry,arch_info,target))
 
 #---------------------------------------------------------------- variables init
 
@@ -19,7 +19,7 @@ PROC_ENDIANNESS :=
 #--------------------------------------------------------------- local variables
 
 #Our curent directory;
-arch_info.cdir := $(dir $(lastword $(MAKEFILE_LIST)))
+arch_info.cdir := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 
 #--------------------------------------------------------------- cross make call
 
@@ -27,7 +27,7 @@ arch_info.cdir := $(dir $(lastword $(MAKEFILE_LIST)))
 $(eval $(call mftk.utility.define,cross_make,env,arch))
 
 #Provide the external directory;
-$(eval $(call mftk.utility.define,cross_make,ext_dir,$(arch_info.cdir).))
+$(eval $(call mftk.utility.define,cross_make,ext_dir,$(arch_info.cdir)))
 
 #Transfer the target;
 $(eval $(call mftk.utility.define,cross_make,target,$(arch_info.target)))
@@ -68,7 +68,3 @@ endif
 ifndef PROC_ENDIANNESS
 $(error makefiles did not define the processor endianness)
 endif
-
-#----------------------------------------------------------------------- cleanup
-
-undefine arch_info.cdir

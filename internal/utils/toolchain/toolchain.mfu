@@ -1,14 +1,8 @@
 #toolchain.mfu - mftk - GPLV3, copyleft 2019 Raphael Outhier;
 
-#----------------------------------------------------------- prerequisites check
+#------------------------------------------------------------------------- entry
 
-#If the target was not provided, fail;
-$(eval $(call REQ_DEF_VAR,toolchain.target,toolchain))
-
-#--------------------------------------------------------------------------- log
-
-#Display the name of the entry architecture;
-$(info [toolchain] entering : ($(toolchain.target)))
+$(eval $(call mftk.util.entry,toolchain,target))
 
 #---------------------------------------------------------------- variables init
 
@@ -26,7 +20,7 @@ $(toolchain.prefix)LDFLAGS :=
 #--------------------------------------------------------------- local variables
 
 #Our curent directory;
-toolchain.cdir := $(dir $(lastword $(MAKEFILE_LIST)))
+toolchain.cdir := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 
 #--------------------------------------------------------------- cross make call
 
@@ -34,7 +28,7 @@ toolchain.cdir := $(dir $(lastword $(MAKEFILE_LIST)))
 $(eval $(call mftk.utility.define,cross_make,environment,arch))
 
 #Provide the external directory;
-$(eval $(call mftk.utility.define,cross_make,directory,$(toolchain.cdir).))
+$(eval $(call mftk.utility.define,cross_make,directory,$(toolchain.cdir)))
 
 #Transfer the target;
 $(eval $(call mftk.utility.define,cross_make,target,$(toolchain.target)))
@@ -52,7 +46,7 @@ endif
 #---------------------------------------------------------- toolchain definition
 
 #include the toolchain file, that will define all toolchain related variables;
-include $(toolchain.cdir)toolchains_list.mk
+include $(toolchain.cdir)/toolchains_list.mk
 
 #-------------------------------------------------------------- toolchain checks
 
@@ -88,12 +82,3 @@ endif
 ifndef $(toolchain.prefix)RE
 $(error the toolchain makefile did not define $(toolchain.prefix)RE (readelf))
 endif
-
-#----------------------------------------------------------------------- cleanup
-
-undefine toolchain.cdir
-undefine toolchain.type
-
-#--------------------------------------------------------------------------- log
-$(info [toolchain] leaving)
-
