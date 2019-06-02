@@ -64,10 +64,10 @@ $(call mftk.error,$2,variable $1($($1)) already defined)
 endif
 endef
 
-#If $1 is not defined or empty, specific error message
+#If $1 is not defined or empty, an error related to $2 is thrown;
 define mftk.check.nempty
 ifeq ($1,)
-$$(error in $2 : empty $3)
+$(call mftk.error,$2,value $1($($1)) already defined)
 endif
 endef
 
@@ -204,7 +204,7 @@ $(call mftk.check.word,$2,$0)
 $(call mftk.check.ndef,$2,$0)
 
 #Check that the variable value is not empty;
-$(call mftk.check.nempty,$2,$0)
+$(call mftk.check.nempty,$3,$0)
 
 #define the variable;
 $1.$2 := $3
