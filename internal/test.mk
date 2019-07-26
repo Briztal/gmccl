@@ -1,12 +1,12 @@
 
 include ../mftk.mk
 
-$(eval $(call mftk.utility.define,toolchain,tc__target,teensy_35))
+$(eval $(call mftk.utility.define,tc,target,teensy35))
 
-$(eval $(call mftk.utility.execute,toolchain))
+$(eval $(call mftk.utility.execute,tc))
 
 
-$(eval $(call mftk.utility.define,arch_info,ai__target,teensy_35))
+$(eval $(call mftk.utility.define,arch_info,target,teensy35))
 
 $(eval $(call mftk.utility.execute,arch_info))
 

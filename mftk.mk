@@ -89,7 +89,7 @@ endef
 #If $1 is not a valid word, or contains the character '.', 
 #an error related to $2 is thrown;
 define mftk.check.name
-$(call mftk.check.word,$1,$2,$3)
+$(call mftk.check.word,$1,$2)
 ifneq ($(findstring .,$1),)
 $(call mftk.error,$2,'.' in value ($1))
 endif
@@ -98,7 +98,7 @@ endef
 #If variable whose name is $1 does not contain an absolute path, an error is
 # reported relatively to context $2;
 define mftk.check.path
-$(call mftk.check.word,$1,$2.$0,variable $1)
+$(call mftk.check.word,$1,$2.$0)
 ifeq ($(filter /%,path $($1)),)
 $(call mftk.error,$2,value does not contain an absolute path ($($1)))
 endif
@@ -126,8 +126,7 @@ define mftk.node.entry
 $(call mftk.exec_entry,$1, $2, $0)
 endef
 
-#--------------------------------------------------------------- build utilities
-
+#----------------------------------------------------------------- namespace ops
 define mftk.undefine_namespace
 $(foreach TMP,$(filter $1.%,$(.VARIABLES)),$$(eval undefine $(TMP)))
 endef
@@ -143,7 +142,7 @@ define mftk.check.namespace
 $(foreach TMP,$2,$(eval $(call mftk.check.def,$1.$(TMP),$3)))
 endef
 
-#----------------------------------------------------------------- namespace ops
+#--------------------------------------------------------------- build utilities
 
 # Registers a makefile by defining its path variable;
 #
@@ -230,11 +229,12 @@ $$(info [MFTK] entering utility $1)
 #include the entry makefile of the utility;
 include $(mftk.utils.$1.path)/$1.mfu
 
+#Undefine all variables in the list;
+$$(eval $$(call mftk.undefine_namespace,$1))
+
 #Log;
 $$(info [MFTK] leaving utility $1)
 
-#Undefine all variables in the list;
-$(call mftk.undefine_namespace,$1)
 
 endef
 
@@ -248,10 +248,10 @@ endef
 define mftk.node.register
 
 #Check that the node name is a valid word;
-$(call mftk.check.word,$1,$0,node name)
+$(call mftk.check.word,$1,$0)
 
 #Check that the makefile path is a valid word;
-$(call mftk.check.word,$2,$0,makefile path)
+$(call mftk.check.word,$2,$0)
 
 #Check that the node is not already defines;
 $(call mftk.check.ndef,mftk.nodes.$1.path,$0)
@@ -275,13 +275,13 @@ include $(mftk.internal_dir)/auto_nodes.mk
 define mftk.node.define
 
 #Check that the node name is a valid word;
-$(call mftk.check.word,$1,$0,node name)
+$(call mftk.check.word,$1,$0)
 
 #Check that the execution identifier is a valid word;
-$(call mftk.check.word,$2,$0,execution identifier)
+$(call mftk.check.word,$2,$0)
 
 #Check that the variable name is a valid word;
-$(call mftk.check.word,$3,$0,variable name)
+$(call mftk.check.word,$3,$0)
 
 #Check that the node is registered;
 $(call mftk.check.def,mftk.nodes.$1.path,$0)
@@ -302,10 +302,10 @@ endef
 define mftk.node.execute_check
 
 #Check that the node name is a valid word;
-$(call mftk.check.word,$1,$0,node name)
+$(call mftk.check.word,$1,$0)
 
 #Check that the execution identifier is a valid word;
-$(call mftk.check.word,$2,$0,execution identifier)
+$(call mftk.check.word,$2,$0)
 
 #Check that the node is registered;
 $(call mftk.check.def,mftk.nodes.$1.path,$0)

@@ -1,0 +1,59 @@
+#cm.mfu - mftk - GPLV3, copyleft 2019 Raphael Outhier;
+
+#----------------------------------------------------------- prerequisites check
+
+#Util init and vars check;
+$(eval $(call mftk.util.entry,cm,env dir target))
+
+#Path check;
+$(eval $(call mftk.check.path,cm.dir,cm))
+
+#-------------------------------------------------------------------------- vars
+
+#Determine the current directory;
+cm.int_dir := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+
+#------------------------------------------------------------------ environments
+
+#Internal environments must only be defined if the environment is internal.
+ifndef cm.external
+
+#Include the arch environment makefile if required;
+ifeq ($(cm.env),arch)
+include $(cm.int_dir)/cm_arch.mk
+else
+
+#If the env was incorrect, fail;
+$(eval $(call mftk_error,cm,bad internal environment $(cm.environment))
+
+endif
+
+#If the environment is internal, add cm namespace prefix;
+cm.env := cm.$(cm.env)
+
+endif
+
+#----------------------------------------------------------------- tree includer
+
+# recursive tree-inclusion function;
+# $1 : targets dependencies variables namespace;
+# $2 : current target;
+# $3 : external directory;
+# $4 : current inclusion history;
+define cm.include_tree
+$(call mftk.check.word,$2,$0)
+ifeq ($(findstring  $2 ,$($1)),)
+$(call mftk.error,$0,$2 is not a declared target of $1)
+endif
+ifneq ($(findstring  $2 ,$4),)
+$(call mftk.error,$0,$4:$2 cyclic dependency)
+endif
+$$(info including $3/$2.mk)
+-include $3/$2.mk
+$(foreach dep,$($1.$2.deps),$$(eval $$(call $0,$1,$(dep),$3,$4 $2)))
+endef
+
+#---------------------------------------------------------------- tree inclusion
+
+#Call the tree includer
+$(eval $(call cm.include_tree,$(cm.env),$(cm.target),$(cm.dir),))

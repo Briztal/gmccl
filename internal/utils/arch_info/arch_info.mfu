@@ -24,16 +24,16 @@ arch_info.cdir := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 #--------------------------------------------------------------- cross make call
 
 #Cross make is used, with the arch environment;
-$(eval $(call mftk.utility.define,cross_make,env,arch))
+$(eval $(call mftk.utility.define,cm,env,arch))
 
 #Provide the external directory;
-$(eval $(call mftk.utility.define,cross_make,ext_dir,$(arch_info.cdir)))
+$(eval $(call mftk.utility.define,cm,dir,$(arch_info.cdir)))
 
 #Transfer the target;
-$(eval $(call mftk.utility.define,cross_make,target,$(arch_info.target)))
+$(eval $(call mftk.utility.define,cm,target,$(arch_info.target)))
 
 #Call cross make;
-$(eval $(call mftk.utility.execute,cross_make))
+$(eval $(call mftk.utility.execute,cm))
 
 #---------------------------------------------------------- arch variables check
 
