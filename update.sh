@@ -1,7 +1,8 @@
 #!/bin/bash
-#update.sh - mftk - GPLV3, copyleft 2019 Raphael Outhier;
 
-mfdir=$(dirname "$0")/..
+#update.sh - mftk - GPLV3, copyleft 2019 Raphael Outhier.
+
+mfdir=$(dirname "$0")
 
 if [[ ! -f ${mfdir}/search_dirs.txt ]]
 then
