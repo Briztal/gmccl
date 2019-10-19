@@ -146,10 +146,10 @@ export .bd
 #Export the debug flag.
 export .debug
 
-#------------------------------------------------------------------- entry check
+#------------------------------------------------------- build environment check
 
-# Check the toolchain and the environment are valid, and that all provided
-# variables are defined.
-.check.entry = \
+# Check the toolchain, the targets, and the build directory are valid, and all
+# required variables are either defined or contain valid paths.
+.check.env = \
 	$(call .check.tc) $(call .check.targets) $(call .check.bd)\
-	$(call .check.vdefs,$1) $(call .check.vpaths,$2)
+	$(call .check.defs,$1) $(call .check.vpaths,$2)
