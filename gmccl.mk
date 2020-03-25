@@ -1,40 +1,49 @@
-#gmccl.mk - gmcl - GPLV3, copyleft 2019 Raphael Outhier.
+##############
+# gmccl path #
+##############
 
-#------------------------------------------------------------------- gmccl path
-
-#Report gmccl is used and provided.
+# Report gmccl is used and provided.
 export .gmccl
 .gmccl := $(abspath $(lastword $(MAKEFILE_LIST)))
 
-#------------------------------------------------------------------------- debug
+#########
+# debug #
+#########
 
-#$1 : the error namespace
-#$2 : the error log
+# $1 : the error namespace
+# $2 : the error log
 .error = $(error In $1 - $2)
 
-#----------------------------------------------------------------------- logical
+###########
+# logical #
+###########
 
-#Basic logit gical operators.
+# Basic logit gical operators.
 .not = $(if $1,,1)
 .or = $(if $1,1,$(if $2,1,))
 .and = $(if $1,$(if $2,1,),)
 .xor = $(if $1,$(if $2,,1),$(if $2,1,))
 .xand = $(if $1,$(if $2,1,),$(if $2,,1))
 
-#-------------------------------------------------------------------- string ops
+##############
+# string ops #
+##############
 
-#Variable containing only one space
+# Variable containing only one space
 .gmccl.space :=
 .gmccl.space +=
 
-#Evaluates to 1 if both strings are equal, and to '' otherwise.
+# Evaluates to 1 if both strings are equal, and to '' otherwise.
 .seq = $(if $(subst $1,,$2)$(subst $2,,$1),,1)
 
-#------------------------------------------------------------------------ checks
-#If the variable $1 is not defined, an error related to $2 is thrown.
+##########
+# checks #
+##########
+
+# If the variable $1 is not defined, an error related to $2 is thrown.
 .check.def = $(if $($1),,$(error Variable $1 not defined))
 
-#If the variable $1 is defined, an error related to $2 is thrown.
+# If the variable $1 is defined, an error related to $2 is thrown.
 .check.ndef = $(if $($1),$(error Variable $1 not defined),)
 
 .check.word = \
@@ -59,7 +68,22 @@ export .gmccl
 	 	$(error $1[$($1)] is not an absolute path),\
 	 )
 
-#------------------------------------------------------------------- nary checks
+.check.goal = \
+	$(call .check.def,MAKECMDGOALS)\
+	$(if\
+	 	$(call .seq,$(MAKECMDGOALS),$(subst $(.gmccl.space),,$(MAKECMDGOALS))),\
+		,\
+		$(error Multiple command goals ($(MAKECMDGOALS)))\
+	)\
+	$(if\
+		$(findstring $(MAKECMDGOALS),$1),\
+		,\
+		$(error bad command goal ($(MAKECMDGOALS)). Options are ($1))\
+	)
+	
+################
+# n-ary checks #
+################
 
 .check.defs = $(foreach var,$1,$(call .check.def,$(var)))
 .check.ndefs = $(foreach var,$1,$(call .check.ndef,$(var)))
@@ -68,10 +92,9 @@ export .gmccl
 .check.vwords = $(foreach var,$1,$(call .check.vword,$(var)))
 .check.vpaths = $(foreach var,$1,$(call .check.vpath,$(var)))
 
-bite := /aa
-suus := /xx
-
-#-------------------------------------------------------------------- cross make
+##############
+# cross make #
+##############
 
 define .cm.inc =
 include $1
@@ -96,60 +119,87 @@ endef
 # $2 : external directory.
 .cm = $(call .check.word,$2)$(foreach arch,$1,$(call ._cm,_a,$(arch),$2,))
 
-#Include the arch (_a) tree.
+# Include the arch (_a) tree.
 include $(dir $(.gmccl))arch.mk
 
-#--------------------------------------------------------------------- toolchain
+#############
+# toolchain #
+#############
 
-#Initialize toolchain variables if required.
+# Initialize toolchain variables if required.
 .tc.cc ?=
 .tc.ld ?=
 .tc.ar ?=
 .tc.oc ?=
 
-#Export all toolchain variables.
+# Export all toolchain variables.
 export .tc.cc
 export .tc.ld
 export .tc.ar
 export .tc.oc
 
-#Check that all toolchain variables are provided.
+# Check that all toolchain variables are provided.
 .check.tc = $(call .check.defs,.tc.cc .tc.ld .tc.ar .tc.oc)
 
-#----------------------------------------------------------------------- targets
+###########
+# targets #
+###########
 
-#Initialize the environment targets if required.
+# Initialize the environment targets if required.
 .targets ?=
 
-#Export the environment.
+# Export the environment.
 export .targets
 
-#Check that the targets variables is defined.
+# Check that the targets variables is defined.
 .check.targets = $(call .check.defs,.targets)
 
-#--------------------------------------------------------------- build directory
+###################
+# build directory #
+###################
 
-#Initialize the build directory if required.
+# Initialize the build directory if required.
 .bd ?=
 
-#Export the build directory.
+# Export the build directory.
 export .bd
 
-#Check that all toolchain variables are provided.
+# Check that all toolchain variables are provided.
 .check.bd = $(call .check.vpath,.bd)
 
-#-------------------------------------------------------------------- debug flag
+##############
+# debug flag #
+##############
 
-#Initialize the debug flag if required.
+# Initialize the debug flag if required.
 .debug ?=
 
-#Export the debug flag.
+# Export the debug flag.
 export .debug
 
-#------------------------------------------------------- build environment check
+###########################
+# build environment check #
+###########################
 
 # Check the toolchain, the targets, and the build directory are valid, and all
 # required variables are either defined or contain valid paths.
 .check.env = \
-	$(call .check.tc) $(call .check.targets) $(call .check.bd)\
-	$(call .check.defs,$1) $(call .check.vpaths,$2)
+	$(call .check.tc)\
+	$(call .check.targets) $(call .check.bd) \
+	$(call .check.defs,$1) $(call .check.vpaths,$2)\
+	$(if $3,$(call .check.goal,$3),)
+
+################
+# Sanitization #
+################
+
+# Disable builtin implicit rules.
+.SUFFIXES :
+% :: %,v
+% :: s.%
+% :: RCS/%,v
+% :: RCS/%
+% :: SCCS/%
+% :: SCCS/s.%
+
+
